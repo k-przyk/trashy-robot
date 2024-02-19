@@ -1,3 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
 add_library(mc SHARED mc.cpp) 
-target_include_directories(mc PUBLIC ${PROJECT_SOURCE_DIR}/include) 
+add_library (PCA SHARED IMPORTED ${PROJECT_SOURCE_DIR}/libs/PCA9685/src/PCA9685) 
+target_link_libraries(mc SHARED PCA) 
+target_include_directories(mc PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/libs/PCA9685/src ${PROJECT_SOURCE_DIR}/libs/I2C/src) 
