@@ -1,0 +1,8 @@
+[submodule "controller/C_controller/libs/PCA9685"]
+	path = controller/C_controller/libs/PCA9685
+	url = git@github.com:TeraHz/PCA9685.git
+    ignore = dirty 
+[submodule "controller/C_controller/libs/I2C"]
+	path = controller/C_controller/libs/I2C
+	url = git@github.com:TeraHz/I2C.git
+    ignore = dirty
