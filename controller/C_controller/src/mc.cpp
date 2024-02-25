@@ -46,24 +46,36 @@ int MC::getPWMFreq(int channel){
 }
 int MC::fwd(){
     m_speed += INCR; 
+    if(m_speed > MAX_THROT){
+        return -1; 
+    }
     pca->setPWM(motor,m_speed); 
     return m_speed; 
 }
 
 int MC::bck(){
     m_speed -= INCR; 
+    if(m_speed < MIN_THROT){
+        return -1; 
+    }
     pca->setPWM(motor,m_speed); 
     return m_speed; 
 }
 
 int MC::right(){
     s_angle += INCR; 
+    if(m_speed > MAX_THROT){
+        return -1; 
+    }
     pca->setPWM(servo,s_angle); 
     return s_angle - MIN_THROT;  
 }
 
 int MC::left(){
     s_angle -= INCR; 
+    if(m_speed < MIN_THROT){
+        return -1; 
+    }
     pca->setPWM(servo,s_angle); 
     return s_angle - MIN_THROT;  
 }
