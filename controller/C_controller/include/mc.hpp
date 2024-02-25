@@ -19,12 +19,12 @@ void mc_testfunc();
 
 class MC{
     public: 
-        MC(int,int); //Servo + ESC channel 
+        MC(uint8_t, uint8_t); //Servo + ESC channel 
         ~MC(); 
-        void fwd(); 
-        void bck(); 
-        void right(); 
-        void left(); 
+        int fwd(); 
+        int bck(); 
+        int right(); 
+        int left(); 
         int getMotorSpeed(); 
         int getServoAngle(); 
         void setMotorSpeed(int speed); 

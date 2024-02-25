@@ -6,7 +6,7 @@ void mc_testfunc(){
     printf("Gets into MC!\n"); 
 }
 
-MC::MC(int servo_channel, int motor_channel){
+MC::MC(uint8_t servo_channel, uint8_t motor_channel){
     pca = new PCA9685(1,ADDR); 
     pca->setPWMFreq(50); 
     servo = servo_channel; 
@@ -16,7 +16,10 @@ MC::MC(int servo_channel, int motor_channel){
 }
 
 MC::~MC(){
+    pca->setPWM(motor,0); 
+    pca->setPWM(servo,0); 
     delete pca; 
+    printf("Freeing MC Controller\n"); 
 }
 
 void MC::setMotorSpeed(int speed){
@@ -41,28 +44,28 @@ int MC::getServoAngle(){
 int MC::getPWMFreq(int channel){
     return pca->getPWM(channel); 
 }
-void MC::fwd(){
+int MC::fwd(){
     m_speed += INCR; 
-    printf("Motor Speed: %x\n", m_speed); 
     pca->setPWM(motor,m_speed); 
+    return m_speed; 
 }
 
-void MC::bck(){
+int MC::bck(){
     m_speed -= INCR; 
-    printf("Motor Speed: %x\n", m_speed); 
     pca->setPWM(motor,m_speed); 
+    return m_speed; 
 }
 
-void MC::right(){
+int MC::right(){
     s_angle += INCR; 
-    printf("Servo Angle: %d\n", (s_angle - MIN_THROT)); 
     pca->setPWM(servo,s_angle); 
+    return s_angle - MIN_THROT;  
 }
 
-void MC::left(){
+int MC::left(){
     s_angle -= INCR; 
-    printf("Servo Angle: %d\n", (s_angle - MIN_THROT)); 
     pca->setPWM(servo,s_angle); 
+    return s_angle - MIN_THROT;  
 }
 
 
