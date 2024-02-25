@@ -1,4 +1,11 @@
+RUN INSTRUCTIONS: 
+Also make sure the git submodules are populated
+TOP LEVEL CMAKE DO CMAKE .. IN A BUILD DIR 
+
+
+
 Learning CMAKE: these examples help https://github.com/ttroy50/cmake-examples/tree/master/01-basic
+
 
 
 
