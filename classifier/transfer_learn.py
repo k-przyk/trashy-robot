@@ -1,7 +1,6 @@
 import torch 
-import torch.nn as nn 
 import torchvision.models as models 
-import torchvision.datasets.voc as tv_datsets
+from torchvision.models.detection import SSDLite320_MobileNet_V3_Large_Weights
 from torchvision.datasets.vision import VisionDataset 
 import torchvision.transforms as transforms 
 import argparse 
@@ -9,14 +8,11 @@ import os
 import cv2
 import numpy as np 
 from torch.utils.data import DataLoader
-import matplotlib.pyplot as plt
 import collections
 from xml.etree.ElementTree import Element as ET_Element
 from xml.etree.ElementTree import parse as ET_parse
 from typing import Any, Callable, Dict, List, Optional, Tuple
 from PIL import Image
-
-
 
 def display_bbox(dataset): 
     for data in dataset: 
@@ -41,9 +37,6 @@ def display_bbox(dataset):
         cv2.destroyAllWindows()
 
 def my_collate(batch):
-    # print("Batch: " + str(batch)) 
-    # print("Type of Batch: " + str(type(batch))) 
-    # print("Size of Batch: " + str(len(batch))) 
     data = [i[0] for i in batch] 
     target = [i[1] for i in batch]
     return data,target 
@@ -108,12 +101,70 @@ class TrashDataset(VisionDataset):
 #NOTE: Made a slight modification to accept jpeg images in voc.py under 
 #opt/homebrew/lib/python3.11/site-packages/torchvision/datasets/voc.py 
 #Import Mobile Net SSD 
+def unnormalize(tensor, mean, std):
+    """
+    Unnormalize a tensor image with mean and standard deviation.
+    Input tensor should be of shape CxHxW.
+    mean and std are sequences of means and standard deviations per channel.
+    """
+    # Duplicate the mean and std to match the tensor's shape
+    mean = torch.as_tensor(mean, dtype=tensor.dtype, device=tensor.device).view(-1, 1, 1)
+    std = torch.as_tensor(std, dtype=tensor.dtype, device=tensor.device).view(-1, 1, 1)
+
+    # Apply the unnormalize formula
+    unnormalized_tensor = tensor * std + mean
+
+    return unnormalized_tensor
+def display_bbox_eval(image,boxes):
+    image = np.transpose(image, (1,2,0))
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
+    # image = np.zeros((540, 960, 3), dtype=np.uint8)
+    image_255 = np.clip(image * 255, 0, 255).astype(np.uint8)
+    # print(image_255)
+    # print("Shape: " + str(image_255.shape))
+    # print("Boxes: " + str(boxes)) 
+    for bbox in boxes:
+        print("BBox: " + str(bbox))
+        xmin = bbox[0].item()
+        ymin = bbox[1].item()
+        xmax = bbox[2].item()
+        ymax = bbox[3].item()
+        pt1 = (int(xmin),int(ymin))
+        pt2 = (int(xmax),int(ymax))
+        print("Pt1: " + str(pt1))
+        print("Pt2: " + str(pt2))
+        cv2.rectangle(image_255, pt1, pt2, (0,255,0),2)
+    cv2.imshow("Eval", image_255)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+
 def eval_model(model, dataloader):
     for images, targets in dataloader: 
-        print(images) 
-        print(targets)
         outputs = model(images, targets)
-        print("Outputs: " + str(outputs))
+        # print("Outputs: " + str(outputs))
+        scores = outputs[0]['scores']
+        boxes = outputs[0]['boxes']
+        labels = outputs[0]['labels'] 
+        # Filter scores greater than 0.87
+        # high_score_indices = scores > 0.90
+        # Select boxes with scores above 0.87
+        high_score_boxes = boxes[0]
+        mean = [0.485, 0.456, 0.406]
+        std = [0.229, 0.224, 0.225]
+        unnormalized_image = unnormalize(images[0],mean,std)
+        display_bbox_eval(unnormalized_image.numpy(),[high_score_boxes])
+        print("Confidence: " + str(scores[0]))  
+        print("Label: " + str(labels[0])) 
+        
+
+
+
+        # print(images) 
+        # print(targets)
+        # outputs = model(images, targets)
+        # print("Outputs: " + str(outputs))
 
 
     
@@ -140,7 +191,10 @@ if __name__ == "__main__":
             help='path to save/load weights')
     parser.add_argument('-tr', '--train', action='store_true', help='Flag to train', default = False)
     args = vars(parser.parse_args())
-    mobile_netv3 = models.detection.ssdlite.ssdlite320_mobilenet_v3_large(weights_backbone = "DEFAULT", num_classes = 1) 
+    mobile_netv3 = models.detection.ssdlite.ssdlite320_mobilenet_v3_large(weights_backbone = "DEFAULT", num_classes = 2) 
+    # mobile_netv3 = models.detection.ssdlite.ssdlite320_mobilenet_v3_large(weights=SSDLite320_MobileNet_V3_Large_Weights.DEFAULT) 
+
+
     #Use transforms
     transforms = transforms.Compose([
         # transforms.Resize((350, 350)),  # Resize the image to 320x320
@@ -157,11 +211,14 @@ if __name__ == "__main__":
     save = args['weights'] 
     data_path = os.path.join(os.getcwd(), path)
     weights_path = os.path.join(os.path.join(os.getcwd(),save),"trash_weights.pth") 
+    num_epochs = 10 
+    batch_size = 64
+    lr = 1e-2
     if train_flag:
         dataset = TrashDataset(root = data_path, image_set='train', transform = transforms)
-        train_dataloader = DataLoader(dataset, batch_size = 3, shuffle = True, num_workers = 1, collate_fn = my_collate)
-        optimizer = torch.optim.SGD(mobile_netv3.parameters(), lr=0.005, momentum=0.9, weight_decay=0.0005)
-        train_model(mobile_netv3,train_dataloader, optimizer,20) 
+        train_dataloader = DataLoader(dataset, batch_size = batch_size, shuffle = True, num_workers = 2, collate_fn = my_collate)
+        optimizer = torch.optim.SGD(mobile_netv3.parameters(), lr=lr, momentum=0.9, weight_decay=0.0005)
+        train_model(mobile_netv3,train_dataloader, optimizer,num_epochs) 
         torch.save(mobile_netv3.state_dict(),weights_path)
         print("Saved Weights in: " + str(weights_path))
     else:
