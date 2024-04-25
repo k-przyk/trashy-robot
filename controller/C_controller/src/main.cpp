@@ -1,62 +1,83 @@
+// 
 #include <stdlib.h> 
-#include <stdio.h> 
-#include "mc.hpp"
 #include <unistd.h> 
+#include <stdio.h> 
+#include "motor_controller.hpp"
 #include <ncurses.h> 
 
 using namespace std; 
 
-int main(int argc, char** argv){
-    MC controller(16,15); 
-    //printf("Motor Speed: %x\n",MAX_THROT); 
-    controller.setMotorSpeed(NEUTRAL); 
-    controller.setServoAngle(90); 
-    char c; 
-    initscr(); 
-    c = getch(); 
-    while(c != 'q'){
-        c = getch(); 
+void loop(MotorController motor);
+void setup(MotorController motor);
+void cleanup(MotorController motor);
+
+int main(int argc, char** argv) {
+    // Create motor object
+    MotorController motor(SERVO_CHANNEL, MOTOR_CHANNEL); 
+
+    setup(motor);
+    loop(motor);
+    cleanup(motor);
+
+    return 0;
+}
+
+void setup(MotorController motor) { 
+    // Set initial motor conditions
+    motor.setMotorSpeed(NEUTRAL); 
+    motor.setServoAngle(STRAIGHT);
+
+    // Setup curses
+    initscr();
+}
+
+void cleanup(MotorController motor) {
+    // Ensure car stops moving
+    motor.setMotorSpeed(NEUTRAL);
+    motor.setServoAngle(STRAIGHT);
+
+    // Teardown curses
+    endwin();
+}
+
+void loop(MotorController motor) {
+
+    char cmd;
+    int motor_speed, turn_angle;
+
+    // Continuously loop through taking commands
+    do {
+        printw("Please choose a cmd: {w - accelerate; s - decelerate; ");
+        printw("a - turn left; d - turn Right}\n");
+
+        cmd = getch(); 
         refresh(); 
-        printw("Char: %c\n", c); 
-        int out; 
-        switch(c){
+
+        printw("Command chosen: %c\n", cmd); 
+        switch(cmd) {
             case 'w': 
-                out = controller.fwd(); 
-                break; 
-            case 'a': 
-                out = controller.right(); 
+                motor.stepForwards(); 
                 break; 
             case 's': 
-                out = controller.bck(); 
+                motor.stepBackwards(); 
+                break; 
+            case 'a': 
+                motor.stepLeft(); 
                 break; 
             case 'd': 
-                out = controller.left(); 
+                motor.stepRight(); 
                 break; 
-
+            case 'q':
+                printw("Exiting Loop");
+                break;
+            default:
+                printw("Command not recognized\n");
+                break;
         }
-        int pwm = controller.getPWMFreq(15); 
-        printw("PWM signal on channel 15: %x\n", pwm); 
-        printw("Speed/Angle: %d\n",out); 
-        //Create a random number and toggle it 
-    /*    int random = rand() % 3; 
-        switch(random){
-            case 0: 
-            printf("PWM signal set: %x\n", MIN_THROT); 
-            controller.setMotorSpeed(MIN_THROT); 
-            break; 
-            case 1: 
-            printf("PWM signal set: %x\n", NEUTRAL); 
-            controller.setMotorSpeed(NEUTRAL); 
-            break; 
-            case 2: 
-            printf("PWM signal set: %x\n", MAX_THROT); 
-            controller.setMotorSpeed(MAX_THROT); 
-            break; 
-        }
-        int pwm = controller.getPWMFreq(15); 
-        printf("PWM signal on channel 15: %x\n", pwm); 
-        usleep(3 * microsecond); */
+        motor_speed = motor.getMotorSpeed(); 
+        turn_angle = motor.getServoAngle();
+        printw("Motor's speed is: %x\n", motor_speed); 
+        printw("Car's angle is: %x\n", turn_angle); 
     }
-    endwin(); 
-    return 1; 
+    while (cmd != 'q');
 } 
