@@ -2,20 +2,13 @@
 import numpy as np
 import math
 import argparse 
-import time
-from pathlib import Path
 import cv2
 import depthai as dai
-import sys 
 import torchvision 
 import torch 
 import torchvision.transforms as transforms 
 from PIL import Image 
 from datetime import timedelta
-import time
-from matplotlib import pyplot as plt
-from timerStream import TimerStream 
-
 
 #Visualization constants: 
 rgbWeight = 0.4 
@@ -33,15 +26,18 @@ def configure_IMU(imu):
     imu.enableIMUSensor([dai.IMUSensor.ACCELEROMETER_RAW],35)
     imu.setBatchReportThreshold(1) 
     imu.setMaxBatchReports(10)
+
 def configure_RGB(camRgb): 
     camRgb.setBoardSocket(dai.CameraBoardSocket.CAM_A)
     camRgb.setResolution(dai.ColorCameraProperties.SensorResolution.THE_1080_P)
     camRgb.setFps(FPS) 
-def configure_Mono(monoLeft,monoRight): 
+
+def configure_Mono(monoLeft, monoRight): 
     monoLeft.setResolution(dai.MonoCameraProperties.SensorResolution.THE_400_P)
     monoLeft.setCamera("left")
     monoRight.setResolution(dai.MonoCameraProperties.SensorResolution.THE_400_P)
     monoRight.setCamera("right")
+
 def configure_Stereo(stereo):
     stereo.setRectifyEdgeFillColor(0) 
     stereo.setLeftRightCheck(True)
@@ -52,9 +48,11 @@ def configure_Stereo(stereo):
     stereo.initialConfig.setConfidenceThreshold(200) 
     stereo.setBaseline(baseline/10) 
     stereo.setFocalLength(focal) 
+
 def configure_Sync(sync):
     sync.setSyncThreshold(timedelta(milliseconds=50))
     sync.setSyncAttempts(-1) 
+    
 def configure_Spatial(spatial): 
     spatial.setWaitForConfigInput(False) 
     config = dai.SpatialLocationCalculatorConfigData() 
@@ -84,21 +82,7 @@ def display_bbox(img,boxes,scores):
         cv2.putText(img,str(score.item()),pt1,cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12),2)
         return (pt1,pt2) 
 
-def timeDeltaToMilliS(delta) -> float:
-    return delta.total_seconds()*1000
-
-def process_Imu(imuPackets): 
-    t.set_baseline("imu") 
-    for p in imuPackets: 
-        acceleroValues = p.acceleroMeter
-        acceleroTs = acceleroValues.getTimestampDevice()
-        imuF = "{:.06f}"
-        tsF  = "{:.03f}"
-        #print(f"Accelerometer [m/s^2]: x: {imuF.format(acceleroValues.x)} y: {imuF.format(acceleroValues.y)} z: {imuF.format(acceleroValues.z)}")
-    t.add_time("imu") 
-
 def process_Stereo(depth,config): 
-    t.set_baseline("depth")
     maxDisp = config.getMaxDisparity() 
     dispIntegerLevels = maxDisp 
     dispScaleFactor = baseline * focal 
@@ -106,29 +90,22 @@ def process_Stereo(depth,config):
         depth = dispScaleFactor / depth 
     depth = (depth * 255. / dispIntegerLevels).astype(np.uint8) 
     depth = cv2.applyColorMap(depth, cv2.COLORMAP_HOT) 
-   # print(np.min(depth),np.mean(depth), np.max(depth), depth.shape)
     depth_bgr = cv2.cvtColor(depth, cv2.COLOR_RGB2BGR)  # Convert to BGR
     cv2.imshow("depth", depth) 
-    t.add_time("depth") 
-    t.format_streamPrint("depth")
 
 def model_inference(rgb_frame,device,image_transforms,model,threshold=0.65): 
-    t.set_baseline("inference") 
     img = Image.fromarray(rgb_frame[:,:,[2,1,0]])  
     tensor = image_transforms(img).to(device)  
     output = model([tensor]) 
     scores = output[0]['scores'] 
     boxes = output[0]['boxes']  
     high_score_indices = scores > threshold
-    t.add_time("inference") 
-    t.format_streamPrint("inference")
     return (boxes[high_score_indices],scores[high_score_indices]) 
 
 def run(args): 
     clear_box_threshold = 10 
     no_box = 0 
     counter = 1
-    global t
     pipeline = dai.Pipeline()
 
     #Create Nodes
@@ -149,21 +126,7 @@ def run(args):
     configure_Sync(sync) 
     spatial_config = configure_Spatial(spatial) 
 
-
-
-    #Xout Nodes
-    xoutStereo = pipeline.create(dai.node.XLinkOut) 
-    xoutStereo.setStreamName("stereo") 
-    xoutLeft = pipeline.create(dai.node.XLinkOut) 
-    xoutLeft.setStreamName("left") 
-    xoutRight = pipeline.create(dai.node.XLinkOut) 
-    xoutRight.setStreamName("right") 
-    xoutSync = pipeline.create(dai.node.XLinkOut) 
-    xoutSync.setStreamName("sync") 
-#    xoutSpatial = pipeline.create(dai.node.XLinkOut)
-#    xoutSpatial.setStreamName("spatial") 
-
-    #Probably create an Xin that is also responsible for setting the STereo config 
+    #Probably create an Xin that is also responsible for setting the Stereo config 
     xinSpatialConfig = pipeline.create(dai.node.XLinkIn) 
     xinSpatialConfig.setStreamName("spatialConfig") 
     xinSpatialConfig.out.link(spatial.inputConfig) 
@@ -172,7 +135,6 @@ def run(args):
 
     monoLeft.out.link(stereo.left)
     monoRight.out.link(stereo.right)
-    stereo.disparity.link(xoutStereo.input)
     stereo.depth.link(spatial.inputDepth) 
 
     #stereo.disparity.link(sync.inputs["disparity"]) 
@@ -187,18 +149,12 @@ def run(args):
     camRgb.video.link(sync.inputs["rgb"]) 
     imu.out.link(sync.inputs["imu"]) 
     spatial.out.link(sync.inputs["spatial"]) #Lets just move this into the sync node
-    #Xout Links
-    sync.out.link(xoutSync.input)
 
     #PyTorch 
     model = torchvision.models.detection.ssdlite.ssdlite320_mobilenet_v3_large(weights_backbone = "DEFAULT", num_classes=2)
     model.load_state_dict(torch.load(args['weights'])) 
     model.eval() 
     torch_device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Using device: {torch_device}")
-    
-
-
 
     image_transforms = transforms.Compose([
         transforms.ColorJitter(brightness = (0.5,1.5), contrast = (0.5,1.5), saturation = (0.5,1.5), hue = (-0.1, 0.1)),
@@ -209,12 +165,9 @@ def run(args):
 
     boxes = None 
     scores = None
-    #Set up timer streams 
-    t = TimerStream() 
-    newConfig = False 
 
     with dai.Device(pipeline) as device:
-        print("Device Connected") 
+        # print("Device Connected") 
         qSync = device.getOutputQueue(name ="sync", maxSize =1, blocking = False)  #Wonder if its not clearnig the q
         qStereo = device.getOutputQueue(name ="stereo", maxSize =1, blocking = False) 
         #qSpatial = device.getOutputQueue(name ="spatial", maxSize =1, blocking = False) 
@@ -225,31 +178,21 @@ def run(args):
         bbox = None
         spatialBox = None
         spatialBoxConfig = None 
-        t.add_stream("imu") 
-        t.add_stream("inference") 
-        t.add_stream("depth") 
-        t.add_stream("sync") 
         while True:
             inSync = qSync.tryGet() 
             inStereo = qStereo.tryGet()
             if inStereo is not None: 
-                t.add_time("depth") 
                 frameDisp = inStereo.getCvFrame() 
                 maxDisparity = stereo.initialConfig.getMaxDisparity() 
                 frameDisp = (frameDisp * 255./maxDisparity).astype(np.uint8) 
                 frameDisp = cv2.pyrDown(frameDisp) 
-                t.format_streamPrint("depth") 
-                t.set_baseline("depth") 
             if inSync is not None: 
-                t.add_time("sync") 
-                t.format_streamPrint("sync") 
                 imuPackets = inSync["imu"].packets 
                 rgbFrames = inSync["rgb"] 
                 spatialData = inSync["spatial"] 
                 #depth = inSync["depth"]
                 #disparity = inSync["disparity"].getCvFrame()
                 #conf_map = inSync["conf"].getCvFrame() 
-                process_Imu(imuPackets)
                 #process_Stereo(depth.getFrame(),stereo.initialConfig)
                 #cv2.imshow("disparity", disparity) 
                 frame = cv2.pyrDown(rgbFrames.getCvFrame())
@@ -281,23 +224,19 @@ def run(args):
                         cfg = dai.SpatialLocationCalculatorConfig() 
                         cfg.addROI(spatial_config) 
                         qSpatialConfig.send(cfg) 
-                        print("Sending Config") 
+                        # print("Sending Config") 
                         space_vec = spatialData.getSpatialLocations() 
                         for depthData in space_vec: 
                             spatialBox = (int(depthData.spatialCoordinates.x),int(depthData.spatialCoordinates.y),int(depthData.spatialCoordinates.z)) 
                             break
                 counter += 1 
-                t.set_baseline("sync") 
             if frameRgb is not None and frameDisp is not None and spatialBox is not None and bbox is not None: 
                 if len(frameDisp.shape) < 3:
                     frameDisp = cv2.cvtColor(frameDisp, cv2.COLOR_GRAY2BGR)
-                
-                print(frameDisp.shape) 
-                print(frameRgb.shape) 
+                 
                 blended = cv2.addWeighted(frameRgb, rgbWeight, frameDisp, depthWeight, 0)
                 pt1 = bbox[0] 
                 pt2 = bbox[1] 
-                print(f"SptialBox ({pt1},{pt2})") 
                 fontType = cv2.FONT_HERSHEY_SIMPLEX
                 cv2.rectangle(blended, pt1,pt2, (0,255,0),2)
                 cv2.putText(blended, f"X: {spatialBox[0]} mm", (pt1[0] + 10, pt1[1] + 20), fontType, 0.5,(0,255,255))

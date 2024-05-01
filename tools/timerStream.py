@@ -30,7 +30,3 @@ class TimerStream():
         peak = self.get_max_time(streamName) 
         small = self.get_min_time(streamName) 
         print(f'{streamName}: ({avg:.3f}s, {peak:.3f}s, {small:.3f}s)')
-
-
-
-
