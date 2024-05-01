@@ -2,7 +2,7 @@
 #include <stdlib.h> 
 #include <unistd.h> 
 #include <stdio.h> 
-#include "motor_controller.hpp"
+#include "motor.hpp"
 #include <ncurses.h> 
 
 using namespace std; 

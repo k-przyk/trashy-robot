@@ -1,7 +1,8 @@
 #pragma once
+#include <cstdint>
 #include <stdlib.h> 
 #include <stdio.h> 
-#include "PCA9685.h"
+// #include "PCA9685.h"
 
 // Important Constants
 // Speed
@@ -36,7 +37,7 @@ class MotorController{
 
     private: 
         // Class variables
-        PCA9685* pca; // Motor Driver
+        // PCA9685* pca; // Motor Driver
         int motor; 
         int servo; 
         int m_speed; 

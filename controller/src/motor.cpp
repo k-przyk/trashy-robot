@@ -1,4 +1,4 @@
-#include "motor_controller.hpp" 
+#include "motor.hpp" 
 
 MotorController::MotorController(uint8_t servo_channel, uint8_t motor_channel) {
     pca = new PCA9685(1, DEVICE_ADDRESS); 
@@ -37,6 +37,7 @@ int MotorController::getServoAngle() {
 int MotorController::getPWMFrequency(int channel) {
     return pca->getPWM(channel); 
 }
+
 int MotorController::stepForwards() {
     m_speed += INCREMENT; 
     if(m_speed >= MAX_THROTTLE) { m_speed = MAX_THROTTLE; }

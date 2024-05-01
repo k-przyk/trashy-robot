@@ -1,6 +1,0 @@
-cmake_minimum_required(VERSION 3.5)
-add_library(motor_controller SHARED motor_controller.cpp) 
-# add_library (PCA SHARED IMPORTED ${PROJECT_SOURCE_DIR}/libs/PCA9685/src/PCA9685) 
-add_subdirectory(${PROJECT_SOURCE_DIR}/libs/PCA9685/src ${PROJECT_SOURCE_DIR}/libs/PCA9685/src/build) 
-target_link_libraries(motor_controller PCA) 
-target_include_directories(motor_controller PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/libs/PCA9685/src ${PROJECT_SOURCE_DIR}/libs/I2C/src) 
