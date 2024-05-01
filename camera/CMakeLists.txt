@@ -23,42 +23,18 @@ find_package(depthai-core)
 
 # Test script for point generation
 add_executable(
-    point_generator
-    src/point_generator.cpp
+    camera
+    src/camera.cpp
 )
 target_link_libraries(
-    point_generator
+    camera
     PRIVATE cppzmq ${CMAKE_THREAD_LIBS_INIT}
-)
-target_include_directories(
-    point_generator 
-    PUBLIC ${PROJECT_SOURCE_DIR}/include
-) 
-
-# Test script for point reception
-add_executable(
-    cmd_reciever
-    src/cmd_reciever.cpp
 )
 target_link_libraries(
-    cmd_reciever
-    PRIVATE cppzmq ${CMAKE_THREAD_LIBS_INIT}
+    camera
+    PRIVATE depthai
 )
 target_include_directories(
-    cmd_reciever 
-    PUBLIC ${PROJECT_SOURCE_DIR}/include
-) 
-
-# Script for PC controller functionality
-add_executable(
-    auto_driver
-    src/auto_driver.cpp
-)
-target_link_libraries(
-    auto_driver
-    PRIVATE cppzmq ${CMAKE_THREAD_LIBS_INIT}
-)
-target_include_directories(
-    auto_driver 
+    camera 
     PUBLIC ${PROJECT_SOURCE_DIR}/include
 ) 
