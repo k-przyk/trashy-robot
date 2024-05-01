@@ -1,0 +1,6 @@
+/home/przyk/Documents/dev/nanocar/trashy-robot/controller/CMakeFiles/cleanup.dir
+/home/przyk/Documents/dev/nanocar/trashy-robot/controller/CMakeFiles/point_generator.dir
+/home/przyk/Documents/dev/nanocar/trashy-robot/controller/CMakeFiles/cmd_reciever.dir
+/home/przyk/Documents/dev/nanocar/trashy-robot/controller/CMakeFiles/auto_driver.dir
+/home/przyk/Documents/dev/nanocar/trashy-robot/controller/CMakeFiles/edit_cache.dir
+/home/przyk/Documents/dev/nanocar/trashy-robot/controller/CMakeFiles/rebuild_cache.dir

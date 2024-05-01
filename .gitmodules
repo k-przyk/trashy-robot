@@ -8,7 +8,7 @@
 	url = git@github.com:TeraHz/I2C.git
     ignore = dirty
 
-[submodule "camera/libs/depthai-core"]
-	path = controller/libs/depthai-core
+[submodule "libs/depthai-core"]
+	path = libs/depthai-core
 	url = git@github.com:luxonis/depthai-core.git
     ignore = dirty

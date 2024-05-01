@@ -19,6 +19,7 @@ add_custom_target(cleanup
 
 find_package(Threads)
 find_package(cppzmq)
+find_package(depthai-core)
 
 # Test script for point generation
 add_executable(
