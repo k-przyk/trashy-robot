@@ -19,7 +19,7 @@ add_custom_target(cleanup
 
 find_package(Threads)
 find_package(cppzmq)
-find_package(depthai-core)
+find_package(depthai CONFIG REQUIRED)
 
 # Test script for point generation
 add_executable(
@@ -28,13 +28,10 @@ add_executable(
 )
 target_link_libraries(
     camera
-    PRIVATE cppzmq ${CMAKE_THREAD_LIBS_INIT}
-)
-target_link_libraries(
-    camera
-    PRIVATE depthai
+    PRIVATE cppzmq ${CMAKE_THREAD_LIBS_INIT} ${OpenCV_LIBS} depthai::opencv
 )
 target_include_directories(
     camera 
     PUBLIC ${PROJECT_SOURCE_DIR}/include
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../libs/depthai-core/shared/depthai-shared/include
 ) 

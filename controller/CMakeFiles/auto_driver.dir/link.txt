@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/auto_driver.dir/src/auto_driver.cpp.o -o bin/auto_driver  /usr/lib/x86_64-linux-gnu/libzmq.so 

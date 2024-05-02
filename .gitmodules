@@ -7,8 +7,3 @@
 	path = controller/libs/I2C
 	url = git@github.com:TeraHz/I2C.git
     ignore = dirty
-
-[submodule "libs/depthai-core"]
-	path = libs/depthai-core
-	url = git@github.com:luxonis/depthai-core.git
-    ignore = dirty

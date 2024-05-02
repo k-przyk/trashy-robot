@@ -1,2 +1,6 @@
 #include <zmq.hpp>
-#include <depthai.hpp>
+#include <iostream>
+#include <cstdio>
+
+#include "depthai/depthai.hpp"
+#include "utility.hpp"
