@@ -35,3 +35,17 @@ target_include_directories(
     PUBLIC ${PROJECT_SOURCE_DIR}/include
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../libs/depthai-core/shared/depthai-shared/include
 ) 
+
+# add_executable(
+#     other_camera
+#     src/other_camera.cpp
+# )
+# target_link_libraries(
+#     other_camera
+#     PRIVATE cppzmq ${CMAKE_THREAD_LIBS_INIT} ${OpenCV_LIBS} depthai::opencv
+# )
+# target_include_directories(
+#     other_camera 
+#     PUBLIC ${PROJECT_SOURCE_DIR}/include
+#     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../libs/depthai-core/shared/depthai-shared/include
+# ) 
