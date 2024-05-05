@@ -7,7 +7,7 @@ int main() {
     zmq::context_t context(1);
     zmq::socket_t rgbPublisher(context, zmq::socket_type::pub);
     zmq::socket_t roiPublisher(context, zmq::socket_type::pub);
-    rgbPublisher.bind("tcp://*:5555"); // Bind to port 5555
+    rgbPublisher.bind("tcp://*:5553"); // Bind to port 5555
     roiPublisher.bind("tcp://*:5554"); // Bind to port 5555
 
     // Configuration
@@ -80,8 +80,6 @@ int main() {
 
     std::cout << "Starting!" << std::endl;
 
-    // auto color = cv::Scalar(255, 255, 255);
-
     // Stream queues
     auto qRgb = device.getOutputQueue("rgb", 4, false);
     auto qRoi = device.getOutputQueue("roi", 4, false);
@@ -92,7 +90,7 @@ int main() {
         auto inRoi = qRoi->get<dai::SpatialLocationCalculatorData>()->getSpatialLocations();
         auto inDepth = qDepth->get<dai::ImgFrame>(); // DO NOT DELETE. NECESSARY OR CRASH
 
-        // Publish frame via zmq
+        // Publish frame and depth via zmq
         cv::Mat image = inRgb->getCvFrame();
         std::vector<uchar> buffer;
         cv::imencode(".jpg", image, buffer);

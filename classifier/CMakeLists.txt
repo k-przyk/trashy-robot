@@ -30,3 +30,7 @@ target_link_libraries(
     classifier
     PRIVATE cppzmq ${CMAKE_THREAD_LIBS_INIT} ${OpenCV_LIBS}
 )
+target_include_directories(
+    classifier 
+    PUBLIC ${PROJECT_SOURCE_DIR}/include
+) 
