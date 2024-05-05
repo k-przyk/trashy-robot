@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 
-project(trash-camera CXX)
+project(trash-classifier CXX)
 
 # place binaries and libraries according to GNU standards
 include(GNUInstallDirs)
@@ -12,26 +12,21 @@ add_custom_target(cleanup
     COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/bin
     COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/CMakeFiles
     COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/cmake_install.cmake
-    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/Makefile
+    COMMAND ${CMAKE_COMMAND} -E /remove ${CMAKE_BINARY_DIR}/Makefile
     COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/CMakeCache.txt
     COMMENT "Cleaning build artifacts"
 )
 
 find_package(Threads)
 find_package(cppzmq)
-find_package(depthai CONFIG REQUIRED)
+find_package(OpenCV REQUIRED)
 
 # Test script for point generation
 add_executable(
-    camera
-    src/camera.cpp
+    classifier
+    src/classifier.cpp
 )
 target_link_libraries(
-    camera
-    PRIVATE cppzmq ${CMAKE_THREAD_LIBS_INIT} ${OpenCV_LIBS} depthai::opencv
+    classifier
+    PRIVATE cppzmq ${CMAKE_THREAD_LIBS_INIT} ${OpenCV_LIBS}
 )
-target_include_directories(
-    camera 
-    PUBLIC ${PROJECT_SOURCE_DIR}/include
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../libs/depthai-core/shared/depthai-shared/include
-) 
