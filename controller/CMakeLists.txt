@@ -17,6 +17,12 @@ add_custom_target(cleanup
     COMMENT "Cleaning build artifacts"
 )
 
+# Add hardware libraries
+add_subdirectory(
+    ${PROJECT_SOURCE_DIR}/libs/PCA9685/src 
+    ${PROJECT_SOURCE_DIR}/libs/PCA9685/src/build
+) 
+
 find_package(Threads)
 find_package(cppzmq)
 
@@ -41,12 +47,15 @@ add_executable(
 )
 target_link_libraries(
     cmd_reciever
-    PRIVATE cppzmq ${CMAKE_THREAD_LIBS_INIT}
+    PRIVATE cppzmq ${CMAKE_THREAD_LIBS_INIT} PCA
 )
 target_include_directories(
     cmd_reciever 
-    PUBLIC ${PROJECT_SOURCE_DIR}/include
+    PUBLIC ${PROJECT_SOURCE_DIR}/include 
+           ${PROJECT_SOURCE_DIR}/libs/PCA9685/src 
+           ${PROJECT_SOURCE_DIR}/libs/I2C/src
 ) 
+
 
 # Script for PC controller functionality
 add_executable(
