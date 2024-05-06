@@ -24,7 +24,7 @@ int main() {
 
         std::cout << "Received Command: (" << receivedCommand.angle << ", " << receivedCommand.speed << ")" << std::endl;
 
-        servoAngle = (int) ((receivedCommand.angle + 1) * STEERING_RANGE + MIN_STEERING); // Don't remove plus one
+        servoAngle = (int) ((receivedCommand.angle / 2.0 + 0.5) * STEERING_RANGE + MIN_STEERING); // Don't remove plus one
         motorSpeed = (int) receivedCommand.speed;
         motor.setMotorSpeed(motorSpeed);
         motor.setServoAngle(servoAngle);

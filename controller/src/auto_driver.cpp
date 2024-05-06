@@ -112,6 +112,8 @@ void manuver(zmq::context_t *ctx) {
 
         // Command for motor
         // motor_speed = motor_speed * THROTTLE_RANGE + MIN_THROTTLE;
+        servo_angle = (servo_angle < -1) ? -1 : servo_angle;
+        servo_angle = (servo_angle >  1) ?  1 : servo_angle;
         commandToSend = {
             servo_angle, 
             motor_speed
