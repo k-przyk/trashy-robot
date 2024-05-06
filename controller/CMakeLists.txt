@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 
 project(trash-controller CXX)
-include(ExternalProject)
 
 # Place binaries and libraries according to GNU standards
 include(GNUInstallDirs)
@@ -9,26 +8,11 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 
-# Set the path to the external project
-set(PCA_PROJECT_DIR ${PROJECT_SOURCE_DIR}/libs/PCA9685/src)
-
-add_custom_target(cleanup
-    COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/bin
-    COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/CMakeFiles
-    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/cmake_install.cmake
-    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/Makefile
-    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/CMakeCache.txt
-    COMMENT "Cleaning build artifacts"
-)
-
-# Add the external project as a dependency using ExternalProject_Add
-# ExternalProject_Add(
-#     PCA
-#     PREFIX ${PCA_PROJECT_DIR}
-#     SOURCE_DIR ${PCA_PROJECT_DIR}
-#     BINARY_DIR ${PCA_PROJECT_DIR}/build
-#     INSTALL_COMMAND ""
-# )
+# Include Hardware libraries
+include_directories(
+    ${PROJECT_SOURCE_DIR}/libs/PCA9685/src 
+    ${PROJECT_SOURCE_DIR}/libs/PCA9685/src/build
+) 
 
 find_package(Threads)
 find_package(cppzmq)
@@ -51,10 +35,13 @@ target_include_directories(
 add_executable(
     cmd_reciever
     src/cmd_reciever.cpp
+    src/motor.cpp
 )
 target_link_libraries(
     cmd_reciever 
-    PRIVATE PCA cppzmq ${CMAKE_THREAD_LIBS_INIT}
+    PRIVATE cppzmq 
+            ${CMAKE_THREAD_LIBS_INIT} 
+            ${PROJECT_SOURCE_DIR}/libs/PCA9685/src/build/libPCA9685.so
 )
 target_include_directories(
     cmd_reciever 

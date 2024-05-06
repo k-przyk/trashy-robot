@@ -43,6 +43,7 @@ int MotorController::stepForwards() {
     if(m_speed >= MAX_THROTTLE) { m_speed = MAX_THROTTLE; }
 
     pca->setPWM(motor, m_speed); 
+    return 0;
 }
 
 int MotorController::stepBackwards() {
@@ -50,6 +51,7 @@ int MotorController::stepBackwards() {
     if(m_speed <= MIN_THROTTLE) { m_speed = MIN_THROTTLE; }
 
     pca->setPWM(motor, m_speed); 
+    return 0;
 }
 
 int MotorController::stepLeft() { // TODO: Double check how this is working

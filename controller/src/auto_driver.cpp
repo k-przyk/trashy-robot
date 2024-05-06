@@ -1,5 +1,5 @@
 #include "controller.hpp" 
-#include "motor.hpp"
+// #include "motor.hpp"
 
 std::mutex mx;
 Point objective;
@@ -112,7 +112,6 @@ void manuver(zmq::context_t *ctx) {
 
         // Command for motor
         // motor_speed = motor_speed * THROTTLE_RANGE + MIN_THROTTLE;
-        servo_angle = (servo_angle + 1) * STEERING_RANGE + MIN_STEERING; // Don't remove plus one
         commandToSend = {
             servo_angle, 
             motor_speed
