@@ -1,12 +1,16 @@
 cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 
 project(trash-controller CXX)
+include(ExternalProject)
 
-# place binaries and libraries according to GNU standards
+# Place binaries and libraries according to GNU standards
 include(GNUInstallDirs)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+
+# Set the path to the external project
+set(PCA_PROJECT_DIR ${PROJECT_SOURCE_DIR}/libs/PCA9685/src)
 
 add_custom_target(cleanup
     COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/bin
@@ -17,11 +21,14 @@ add_custom_target(cleanup
     COMMENT "Cleaning build artifacts"
 )
 
-# Add hardware libraries
-add_subdirectory(
-    ${PROJECT_SOURCE_DIR}/libs/PCA9685/src 
-    ${PROJECT_SOURCE_DIR}/libs/PCA9685/src/build
-) 
+# Add the external project as a dependency using ExternalProject_Add
+ExternalProject_Add(
+    PCA
+    PREFIX ${PCA_PROJECT_DIR}
+    SOURCE_DIR ${PCA_PROJECT_DIR}
+    BINARY_DIR ${PCA_PROJECT_DIR}/build
+    INSTALL_COMMAND ""
+)
 
 find_package(Threads)
 find_package(cppzmq)
@@ -51,11 +58,8 @@ target_link_libraries(
 )
 target_include_directories(
     cmd_reciever 
-    PUBLIC ${PROJECT_SOURCE_DIR}/include 
-           ${PROJECT_SOURCE_DIR}/libs/PCA9685/src 
-           ${PROJECT_SOURCE_DIR}/libs/I2C/src
+    PUBLIC ${PROJECT_SOURCE_DIR}/include
 ) 
-
 
 # Script for PC controller functionality
 add_executable(
