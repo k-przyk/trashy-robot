@@ -4,64 +4,65 @@
 
 using namespace std; 
 
-void loop(MotorController motor);
-void setup(MotorController motor);
-void cleanup(MotorController motor);
+void loop(MotorController* motor);
+void setup(MotorController* motor);
+void cleanup(MotorController* motor);
 
 int main(int argc, char** argv) {
     // Create motor object
     MotorController motor(SERVO_CHANNEL, MOTOR_CHANNEL); 
 
-    setup(motor);
-    loop(motor);
-    cleanup(motor);
+    setup(&motor);
+    loop(&motor);
+    cleanup(&motor);
 
     return 0;
 }
 
-void setup(MotorController motor) { 
+void setup(MotorController* motor) { 
     // Set initial motor conditions
-    motor.setMotorSpeed(NEUTRAL); 
-    motor.setServoAngle(STRAIGHT);
+    motor->setMotorSpeed(NEUTRAL); 
+    motor->setServoAngle(STRAIGHT);
 
     // Setup curses
     initscr();
 }
 
-void cleanup(MotorController motor) {
+void cleanup(MotorController* motor) {
     // Ensure car stops moving
-    motor.setMotorSpeed(NEUTRAL);
-    motor.setServoAngle(STRAIGHT);
+    motor->setMotorSpeed(NEUTRAL);
+    motor->setServoAngle(STRAIGHT);
 
     // Teardown curses
     endwin();
 }
 
-void loop(MotorController motor) {
+void loop(MotorController* motor) {
 
     char cmd;
     int motor_speed, turn_angle;
 
     // Continuously loop through taking commands
     do {
-        // printw("Please choose a cmd: {w - accelerate; s - decelerate; ");
-        // printw("a - turn left; d - turn Right}\n");
+        printw("Please choose a cmd: {w - accelerate; s - decelerate; ");
+        printw("a - turn left; d - turn Right}\n");
 
-        cmd = getch();  
+        cmd = getch();
+        refresh();  
 
-        // printw("Command chosen: %c\n", cmd); 
+        printw("Command chosen: %c\n", cmd); 
         switch(cmd) {
             case 'w': 
-                motor.stepForwards(); 
+                motor->stepForwards(); 
                 break; 
             case 's': 
-                motor.stepBackwards(); 
+                motor->stepBackwards(); 
                 break; 
             case 'a': 
-                motor.stepLeft(); 
+                motor->stepLeft(); 
                 break; 
             case 'd': 
-                motor.stepRight(); 
+                motor->stepRight(); 
                 break; 
             case 'q':
                 printw("Exiting Loop");
@@ -70,11 +71,10 @@ void loop(MotorController motor) {
                 printw("Command not recognized\n");
                 break;
         }
-        motor_speed = motor.getMotorSpeed(); 
-        turn_angle = motor.getServoAngle();
+        motor_speed = motor->getMotorSpeed(); 
+        turn_angle = motor->getServoAngle();
         printw("Motor's speed is: %x\n", motor_speed); 
         printw("Car's angle is: %x\n", turn_angle); 
-        refresh();
     }
     while (cmd != 'q');
 } 
