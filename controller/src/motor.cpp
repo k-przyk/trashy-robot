@@ -2,7 +2,7 @@
 
 MotorController::MotorController(uint8_t servo_channel, uint8_t motor_channel) {
     pca = new PCA9685(1, DEVICE_ADDRESS); 
-    pca->setPWMFrequency(50); 
+    pca->setPWMFreq(50); 
     servo = servo_channel; 
     motor = motor_channel; 
     m_speed = NEUTRAL; 
@@ -45,7 +45,7 @@ int MotorController::stepForwards() {
     pca->setPWM(motor, m_speed); 
 }
 
-int MotorController::stepBack() {
+int MotorController::stepBackwards() {
     m_speed -= INCREMENT; 
     if(m_speed <= MIN_THROTTLE) { m_speed = MIN_THROTTLE; }
 

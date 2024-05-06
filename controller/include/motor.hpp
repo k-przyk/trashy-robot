@@ -2,16 +2,19 @@
 #include <cstdint>
 #include <stdlib.h> 
 #include <stdio.h> 
-// #include "PCA9685.h"
+#include "PCA9685.h"
 
 // Important Constants
-// Speed
-#define NEUTRAL 0X133 
 #define MIN_THROTTLE 0X0cc 
 #define MAX_THROTTLE 0x199 
-#define THROTTLE_RANGE (MAX_THROT - MIN_THROT)
+#define MIN_STEERING 0x0cc
+#define MAX_STEERING 0x199
+#define THROTTLE_RANGE (MAX_THROTTLE - MIN_THROTTLE)
+#define STEERING_RANGE (MAX_STEERING - MIN_STEERING)
 #define FREQUENCY 50 
 #define INCREMENT 0X1 
+#define NEUTRAL 0X133 
+#define STRAIGHT STEERING_RANGE / 2 + MIN_STEERING
 
 // Device State
 #define DEVICE_ADDRESS 0x40 // Default address for i2c driver
@@ -37,7 +40,7 @@ class MotorController{
 
     private: 
         // Class variables
-        // PCA9685* pca; // Motor Driver
+        PCA9685* pca; // Motor Driver
         int motor; 
         int servo; 
         int m_speed; 

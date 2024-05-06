@@ -15,5 +15,7 @@ struct Command {
     float angle, speed;
 };
 
-#define CENTER_X 500
-#define REACHABLE_Y 50 // TODO: This needs to adjust to be a range
+#define MAX_X 300
+#define CENTER_X 150
+#define REACHABLE_Y 0 // TODO: This needs to adjust to be a range
+#define DISTANCE_TOLERANCE 400 

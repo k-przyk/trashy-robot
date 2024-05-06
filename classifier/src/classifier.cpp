@@ -19,7 +19,7 @@ int main() {
     subscriber.set(zmq::sockopt::subscribe, "");
 
     zmq::socket_t publisher(context, zmq::socket_type::pub);
-    publisher.bind("tcp://*:5556");
+    publisher.bind("tcp://*:5555");
 
     cout << "Hola" << endl;
 
