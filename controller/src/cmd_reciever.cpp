@@ -26,8 +26,10 @@ int main() {
 
         servoAngle = (int) ((receivedCommand.angle / 2.0 + 0.5) * STEERING_RANGE + MIN_STEERING); // Don't remove plus one
         motorSpeed = (int) (receivedCommand.speed * THROTTLE_RANGE + MIN_THROTTLE);
-        motor.setMotorSpeed(motorSpeed);
-        motor.setServoAngle(servoAngle);
+
+        std::cout << "Setting Motor Speed: " << motorSpeed << " Servo Angle: " << servoAngle << std::endl;
+        // motor.setMotorSpeed(motorSpeed);
+        // motor.setServoAngle(servoAngle);
     }
 
     return 0;
