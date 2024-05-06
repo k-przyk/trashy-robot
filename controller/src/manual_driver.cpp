@@ -1,7 +1,4 @@
-// 
-#include <stdlib.h> 
 #include <unistd.h> 
-#include <stdio.h> 
 #include "motor.hpp"
 #include <ncurses.h> 
 

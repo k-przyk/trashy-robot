@@ -16,6 +16,7 @@ include_directories(
 
 find_package(Threads)
 find_package(cppzmq)
+find_package(Curses REQUIRED)
 
 # Test script for point generation
 add_executable(
@@ -75,6 +76,7 @@ target_link_libraries(
     PRIVATE cppzmq 
             ${CMAKE_THREAD_LIBS_INIT} 
             ${PROJECT_SOURCE_DIR}/libs/PCA9685/src/build/libPCA9685.so
+            ${CURSES_LIBRARIES}
 )
 target_include_directories(
     manual_driver 
