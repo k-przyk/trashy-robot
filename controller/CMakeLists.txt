@@ -31,7 +31,7 @@ target_include_directories(
     PUBLIC ${PROJECT_SOURCE_DIR}/include
 ) 
 
-# Test script for point reception
+# Script for command reception
 add_executable(
     cmd_reciever
     src/cmd_reciever.cpp
@@ -62,4 +62,23 @@ target_link_libraries(
 target_include_directories(
     auto_driver 
     PUBLIC ${PROJECT_SOURCE_DIR}/include
+) 
+
+# Script for manual control
+add_executable(
+    manual_driver
+    src/manual_driver.cpp
+    src/motor.cpp
+)
+target_link_libraries(
+    manual_driver 
+    PRIVATE cppzmq 
+            ${CMAKE_THREAD_LIBS_INIT} 
+            ${PROJECT_SOURCE_DIR}/libs/PCA9685/src/build/libPCA9685.so
+)
+target_include_directories(
+    manual_driver 
+    PUBLIC ${PROJECT_SOURCE_DIR}/include
+           ${PROJECT_SOURCE_DIR}/libs/PCA9685/src 
+           ${PROJECT_SOURCE_DIR}/libs/I2C/src
 ) 
