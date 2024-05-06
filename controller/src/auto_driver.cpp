@@ -67,14 +67,12 @@ void manuver(zmq::context_t *ctx) {
             trash_pt = {objective.x, objective.y, objective.z};
         mx.unlock();
 
-        if (trash_pt.x == -1 || trash_pt.y == -1 || trash_pt.z == -1) {
+        if (trash_pt.x <= 0. || trash_pt.y <= 0. || trash_pt.z <= 0.) {
             commandToSend = {0.0, 0.0};
 
         } else {
             a_error = getAngleError(&trash_pt); 
             d_error = getDistanceError(&trash_pt);
-
-            std::cout << "A Error: " << a_error << std::endl;
             
             // Handle Angle PID
             a_integral = a_integral + a_error * timestep;
@@ -153,7 +151,7 @@ int main() {
 
     // Init Values for the objective
     mx.lock(); // Lock not strictly needed here, but left in case of compiler optimization
-        objective = {0.0f, 0.0f};
+        objective = {0.0f, 0.0f, 0.0f};
     mx.unlock();
 
     // Start the PID loop
