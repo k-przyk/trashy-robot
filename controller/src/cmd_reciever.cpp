@@ -1,11 +1,11 @@
 #include "controller.hpp"
-#include "motor.hpp"
+// #include "motor.hpp"
 
 int main() {
 
-    MotorController motor(SERVO_CHANNEL, MOTOR_CHANNEL); 
-    motor.setMotorSpeed(NEUTRAL); 
-    motor.setServoAngle(STRAIGHT);
+    // MotorController motor(SERVO_CHANNEL, MOTOR_CHANNEL); 
+    // motor.setMotorSpeed(NEUTRAL); 
+    // motor.setServoAngle(STRAIGHT);
 
     zmq::context_t context(1);
     zmq::socket_t subscriber(context, zmq::socket_type::sub);
@@ -22,8 +22,8 @@ int main() {
 
         std::cout << "Received Command: (" << receivedCommand.angle << ", " << receivedCommand.speed << ")" << std::endl;
 
-        motor.setMotorSpeed(receivedCommand.speed);
-        motor.setServoAngle(receivedCommand.angle);
+        // motor.setMotorSpeed(receivedCommand.speed);
+        // motor.setServoAngle(receivedCommand.angle);
     }
 
     return 0;

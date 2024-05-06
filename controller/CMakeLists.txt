@@ -59,6 +59,8 @@ target_link_libraries(
 target_include_directories(
     cmd_reciever 
     PUBLIC ${PROJECT_SOURCE_DIR}/include
+           ${PROJECT_SOURCE_DIR}/libs/PCA9685/src 
+           ${PROJECT_SOURCE_DIR}/libs/I2C/src
 ) 
 
 # Script for PC controller functionality
