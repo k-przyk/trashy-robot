@@ -86,7 +86,7 @@ int main() {
 
         CommandPoint objective = {centerPoint.x, centerPoint.y, (float) depthValue};
 
-        cout << "Center - x: " << objective.x << " y: " << objective.y << endl;
+        cout << "Center - x: " << objective.x << " y: " << objective.y << " z: " << depthValue << endl;
 
         zmq::message_t msg(sizeof(CommandPoint));
         memcpy(msg.data(), &objective, sizeof(CommandPoint));
