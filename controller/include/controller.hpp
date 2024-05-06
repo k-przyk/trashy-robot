@@ -17,5 +17,6 @@ struct Command {
 
 #define MAX_X 300
 #define CENTER_X 150
-#define REACHABLE_Y 0 // TODO: This needs to adjust to be a range
 #define DISTANCE_TOLERANCE 400 
+
+#define SATURATE_DEPTH 2000

@@ -14,22 +14,33 @@ int main() {
 
     zmq::context_t context(1);
 
-    zmq::socket_t subscriber(context, zmq::socket_type::sub);
-    subscriber.connect("tcp://localhost:5553");
-    subscriber.set(zmq::sockopt::subscribe, "");
+    zmq::socket_t img_subscriber(context, zmq::socket_type::sub);
+    img_subscriber.connect("tcp://localhost:5553");
+    img_subscriber.set(zmq::sockopt::subscribe, "");
+
+    zmq::socket_t roi_subscriber(context, zmq::socket_type::sub);
+    roi_subscriber.connect("tcp://localhost:5554");
+    roi_subscriber.set(zmq::sockopt::subscribe, "");
 
     zmq::socket_t publisher(context, zmq::socket_type::pub);
     publisher.bind("tcp://*:5555");
 
     cout << "Hola" << endl;
 
+    int depthValue = 0;
+
     while (true) {
-        zmq::message_t message;
-        subscriber.recv(message, zmq::recv_flags::none);
+        zmq::message_t imageMessage;
+        img_subscriber.recv(imageMessage, zmq::recv_flags::none);
+
+        zmq::message_t depthMessage;
+        if (roi_subscriber.recv(&depthMessage, ZMQ_DONTWAIT)) {
+            memcpy(&depthValue, depthMessage.data(), sizeof(int));
+        }
 
         // Decode image
-        const char* messageData = static_cast<const char*>(message.data());
-        vector<uchar> imageData(messageData, messageData + message.size());
+        const char* messageData = static_cast<const char*>(imageMessage.data());
+        vector<uchar> imageData(messageData, messageData + imageMessage.size());
         image = imdecode(imageData, IMREAD_COLOR);
 
         // Convert to HSV
@@ -73,7 +84,7 @@ int main() {
         int key = waitKey(1);
         if (key == 'q') break;
 
-        CommandPoint objective = {centerPoint.x, centerPoint.y, 0.0};
+        CommandPoint objective = {centerPoint.x, centerPoint.y, (float) depthValue};
 
         cout << "Center - x: " << objective.x << " y: " << objective.y << endl;
 

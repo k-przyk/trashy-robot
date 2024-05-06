@@ -11,11 +11,6 @@ float getAngleError(Point *trash_pt) {
     // Assuming that we have a point
     float a_error;
 
-    // Check if we can reach this
-    // if (trash_pt->y < REACHABLE_Y) { // TODO: AND with other field conditions
-    //     return -1;
-    // }
-
     // Get the pixel deviation from screen center
     a_error = (trash_pt->x - CENTER_X) / CENTER_X;
     return a_error;
@@ -25,13 +20,10 @@ float getDistanceError(Point *trash_pt) {
     // Assuming that we have a point
     float d_error;
 
-    // Check if we can reach this
-    // if (trash_pt->y < REACHABLE_Y) { // TODO: AND with other field conditions
-    //     return -1;
-    // }
-
     // Get the pixel deviation from screen center
     d_error = trash_pt->z;
+    d_error = (d_error > SATURATE_DEPTH) ? SATURATE_DEPTH : d_error;
+    d_error = d_error / SATURATE_DEPTH;
     return d_error;
 }
 
@@ -47,7 +39,7 @@ void manuver(zmq::context_t *ctx) {
     float ki_angle = 0.0;
     float kd_angle = 0.0;
 
-    float kp_speed = 0.0;
+    float kp_speed = 1.0;
     float ki_speed = 0.0;
     float kd_speed = 0.0;
 
@@ -111,9 +103,9 @@ void manuver(zmq::context_t *ctx) {
         integral_steps++;
 
         // Command for motor
-        // motor_speed = motor_speed * THROTTLE_RANGE + MIN_THROTTLE;
         servo_angle = (servo_angle < -1) ? -1 : servo_angle;
         servo_angle = (servo_angle >  1) ?  1 : servo_angle;
+        motor_speed = (motor_speed >  1) ?  1 : motor_speed;
         commandToSend = {
             servo_angle, 
             motor_speed
