@@ -22,13 +22,13 @@ add_custom_target(cleanup
 )
 
 # Add the external project as a dependency using ExternalProject_Add
-ExternalProject_Add(
-    PCA
-    PREFIX ${PCA_PROJECT_DIR}
-    SOURCE_DIR ${PCA_PROJECT_DIR}
-    BINARY_DIR ${PCA_PROJECT_DIR}/build
-    INSTALL_COMMAND ""
-)
+# ExternalProject_Add(
+#     PCA
+#     PREFIX ${PCA_PROJECT_DIR}
+#     SOURCE_DIR ${PCA_PROJECT_DIR}
+#     BINARY_DIR ${PCA_PROJECT_DIR}/build
+#     INSTALL_COMMAND ""
+# )
 
 find_package(Threads)
 find_package(cppzmq)
@@ -53,8 +53,8 @@ add_executable(
     src/cmd_reciever.cpp
 )
 target_link_libraries(
-    cmd_reciever
-    PRIVATE cppzmq ${CMAKE_THREAD_LIBS_INIT} PCA
+    cmd_reciever 
+    PRIVATE PCA cppzmq ${CMAKE_THREAD_LIBS_INIT}
 )
 target_include_directories(
     cmd_reciever 
