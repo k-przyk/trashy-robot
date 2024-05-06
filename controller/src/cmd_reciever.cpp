@@ -9,6 +9,10 @@ int main() {
     motor.setMotorSpeed(NEUTRAL); 
     motor.setServoAngle(STRAIGHT);
 
+    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+
+    std::cout << "Starting!" << std::endl;
+
     zmq::context_t context(1);
     zmq::socket_t subscriber(context, zmq::socket_type::sub);
     subscriber.connect("tcp://localhost:5556"); // Connect to the sender's IP and port
@@ -28,8 +32,8 @@ int main() {
         motorSpeed = (int) (receivedCommand.speed * THROTTLE_RANGE + MIN_THROTTLE);
 
         std::cout << "Setting Motor Speed: " << motorSpeed << " Servo Angle: " << servoAngle << std::endl;
-        motor.setMotorSpeed(motorSpeed);
-        motor.setServoAngle(servoAngle);
+        // motor.setMotorSpeed(motorSpeed);
+        // motor.setServoAngle(servoAngle);
     }
 
     return 0;

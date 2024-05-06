@@ -25,7 +25,7 @@ int main() {
     zmq::socket_t publisher(context, zmq::socket_type::pub);
     publisher.bind("tcp://*:5555");
 
-    cout << "Hola" << endl;
+    cout << "Starting!" << endl;
 
     int depthValue = 0;
 

@@ -14,8 +14,8 @@
 #define STEERING_RANGE (MAX_STEERING - MIN_STEERING)
 #define FREQUENCY 50 
 #define INCREMENT 0X1 
-#define NEUTRAL 0X133 
-#define STRAIGHT STEERING_RANGE / 2 + MIN_STEERING // 0x50
+#define NEUTRAL 0X000
+#define STRAIGHT (MAX_STEERING + MIN_STEERING) / 2 // 0x50
 
 // Device State
 #define DEVICE_ADDRESS 0x40 // Default address for i2c driver

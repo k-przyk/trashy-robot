@@ -150,6 +150,8 @@ int main() {
     // Retrieve ZMQ context
     zmq::context_t context(1);
 
+    std::cout << "Starting!" << std::endl;
+
     // Init Values for the objective
     mx.lock(); // Lock not strictly needed here, but left in case of compiler optimization
         objective = {0.0f, 0.0f, 0.0f};
