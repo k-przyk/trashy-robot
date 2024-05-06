@@ -67,40 +67,44 @@ void manuver(zmq::context_t *ctx) {
             trash_pt = {objective.x, objective.y, objective.z};
         mx.unlock();
 
-        // TODO: what if point values are -1?
-        a_error = getAngleError(&trash_pt); 
-        d_error = getDistanceError(&trash_pt);
+        if (trash_pt.x == -1 || trash_pt.y == -1 || trash_pt.z == -1) {
+            commandToSend = {0.0, 0.0};
 
-        std::cout << "A Error: " << a_error << std::endl;
-        
-        // Handle Angle PID
-        a_integral = a_integral + a_error * timestep;
-        a_derivative = (a_error - a_error_old) / timestep;
-        servo_angle = kp_angle * a_error + kd_angle * a_derivative + ki_angle * a_integral;
+        } else {
+            a_error = getAngleError(&trash_pt); 
+            d_error = getDistanceError(&trash_pt);
 
-        // Handle Distance PID
-        d_integral = d_integral + d_error * timestep;
-        d_derivative = (d_error - d_error_old) / timestep;
-        motor_speed = kp_speed * d_error + kd_speed * d_derivative + ki_speed * d_integral;
+            std::cout << "A Error: " << a_error << std::endl;
+            
+            // Handle Angle PID
+            a_integral = a_integral + a_error * timestep;
+            a_derivative = (a_error - a_error_old) / timestep;
+            servo_angle = kp_angle * a_error + kd_angle * a_derivative + ki_angle * a_integral;
 
-        // Prevent unbounded integral error accumulation
-        if (integral_steps > 1000) { 
-            a_integral = 0.0;
-            d_integral = 0.0;
-            integral_steps = 0;
+            // Handle Distance PID
+            d_integral = d_integral + d_error * timestep;
+            d_derivative = (d_error - d_error_old) / timestep;
+            motor_speed = kp_speed * d_error + kd_speed * d_derivative + ki_speed * d_integral;
+
+            // Prevent unbounded integral error accumulation
+            if (integral_steps > 1000) { 
+                a_integral = 0.0;
+                d_integral = 0.0;
+                integral_steps = 0;
+            }
+
+            // Break condition on driving to trash
+            if (d_error < DISTANCE_TOLERANCE) {
+                d_integral = 0;
+                motor_speed = 0;
+                // TODO: should do something? Or maybe stays stopped?
+            }
+
+            // Set next iteration values
+            a_error_old = a_error;
+            d_error_old = d_error;
+            integral_steps++;
         }
-
-        // Break condition on driving to trash
-        if (d_error < DISTANCE_TOLERANCE) {
-            d_integral = 0;
-            motor_speed = 0;
-            // TODO: should do something? Or maybe stays stopped?
-        }
-
-        // Set next iteration values
-        a_error_old = a_error;
-        d_error_old = d_error;
-        integral_steps++;
 
         // Command for motor
         servo_angle = (servo_angle < -1) ? -1 : servo_angle;
