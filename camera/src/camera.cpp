@@ -69,7 +69,7 @@ void pub_depth(zmq::context_t* context,
             std::cout << "Points - topleft (" << xmin << ", " << ymin << "), botRight (" << xmax << ", " << ymax << ")" << std::endl;
 
             config->roi = dai::Rect(topLeft, bottomRight);
-            config->calculationAlgorithm = dai::SpatialLocationCalculatorAlgorithm::MEDIAN;
+            config->calculationAlgorithm = dai::SpatialLocationCalculatorAlgorithm::MEAN;
             dai::SpatialLocationCalculatorConfig cfg;
             cfg.addROI(*config);
             qConfig->send(cfg);
@@ -143,7 +143,7 @@ int main() {
     dai::SpatialLocationCalculatorConfigData config;
     config.depthThresholds.lowerThreshold = 100;
     config.depthThresholds.upperThreshold = 10000;
-    auto algorithm = dai::SpatialLocationCalculatorAlgorithm::MEDIAN;
+    auto algorithm = dai::SpatialLocationCalculatorAlgorithm::MEAN;
     config.calculationAlgorithm = algorithm;
     config.roi = dai::Rect(topLeft, bottomRight);
 
