@@ -61,16 +61,16 @@ void pub_depth(zmq::context_t* context,
             float xmax, ymax, xmin, ymin;
             memcpy(&objective, objectMessage.data(), sizeof(CommandPoint));
             
-            xmin = objective.x / 300.0 - 0.05;
+            xmin = objective.x / 300.0 - 0.025;
             xmin = xmin < 0 ? 0 : xmin;
 
-            xmax = objective.x / 300.0 + 0.05;
+            xmax = objective.x / 300.0 + 0.025;
             xmax = xmax > 1 ? 1 : xmax;
 
-            ymin = objective.y / 300.0 - 0.05;
+            ymin = objective.y / 300.0 - 0.025;
             ymin = ymin < 0 ? 0 : ymin;
 
-            ymax = objective.y / 300.0 + 0.05;
+            ymax = objective.y / 300.0 + 0.025;
             ymax = ymax > 1 ? 1 : ymax;
 
             dai::Point2f topLeft(xmin, ymin);
@@ -151,13 +151,13 @@ int main() {
     auto cfg = stereo->initialConfig.get();
     // cfg.postProcessing.speckleFilter.enable = false;
     // cfg.postProcessing.speckleFilter.speckleRange = 50;
-    // cfg.postProcessing.temporalFilter.enable = true;
+    cfg.postProcessing.temporalFilter.enable = true;
     // cfg.postProcessing.spatialFilter.enable = true;
     // cfg.postProcessing.spatialFilter.holeFillingRadius = 2;
     // cfg.postProcessing.spatialFilter.numIterations = 1;
     // cfg.postProcessing.thresholdFilter.minRange = 200;
     // cfg.postProcessing.thresholdFilter.maxRange = 7000;
-    // cfg.postProcessing.decimationFilter.decimationFactor = 1;
+    cfg.postProcessing.decimationFilter.decimationFactor = 1;
     stereo->initialConfig.set(cfg);
 
     // Roi config
