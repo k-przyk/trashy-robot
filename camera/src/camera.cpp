@@ -61,16 +61,16 @@ void pub_depth(zmq::context_t* context,
             float xmax, ymax, xmin, ymin;
             memcpy(&objective, objectMessage.data(), sizeof(CommandPoint));
             
-            xmin = objective.x / 300.0 - 0.025; // Keep box big to manage motion blurring
+            xmin = objective.x / 300.0 - 0.05; // Keep box big to manage motion blurring
             xmin = xmin < 0 ? 0 : xmin;
 
-            xmax = objective.x / 300.0 + 0.025;
+            xmax = objective.x / 300.0 + 0.05;
             xmax = xmax > 1 ? 1 : xmax;
 
-            ymin = objective.y / 300.0 - 0.025;
+            ymin = objective.y / 300.0 - 0.05;
             ymin = ymin < 0 ? 0 : ymin;
 
-            ymax = objective.y / 300.0 + 0.025;
+            ymax = objective.y / 300.0 + 0.05;
             ymax = ymax > 1 ? 1 : ymax;
 
             dai::Point2f topLeft(xmin, ymin);
