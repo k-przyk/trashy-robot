@@ -6,8 +6,8 @@
 
 // Important Constants
 // #define MIN_THROTTLE 0X0cc
-#define MAX_THROTTLE 0x199 
-#define MIN_THROTTLE 0X0cc
+#define MAX_THROTTLE 0x113 
+#define MIN_THROTTLE 0X105
 // #define MAX_THROTTLE 0x110     // 0x150
 // #define MIN_STEERING 0x020
 // #define MAX_STEERING 0x080
