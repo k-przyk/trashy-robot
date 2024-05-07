@@ -6,7 +6,7 @@ MotorController::MotorController(uint8_t servo_channel, uint8_t motor_channel) {
     pca->setPWMFreq(50); 
     servo = servo_channel; 
     motor = motor_channel; 
-    m_speed = NEUTRAL; 
+    m_speed = MOTOR_START; 
     s_angle = STRAIGHT; 
 }
 
@@ -19,7 +19,7 @@ MotorController::~MotorController() {
 
 void MotorController::setMotorSpeed(int speed) {
     m_speed = (speed > MAX_THROTTLE) ? MAX_THROTTLE : speed;
-    m_speed = (m_speed < MIN_THROTTLE) ? MIN_THROTTLE : m_speed;
+    m_speed = (m_speed < MOTOR_START) ? MOTOR_START : m_speed;
     pca->setPWM(motor, m_speed); 
 }
 
@@ -51,7 +51,7 @@ int MotorController::stepForwards() {
 
 int MotorController::stepBackwards() {
     m_speed -= INCREMENT; 
-    m_speed = (m_speed < MIN_THROTTLE) ? MIN_THROTTLE : m_speed;
+    m_speed = (m_speed < MOTOR_START) ? MOTOR_START : m_speed;
 
     pca->setPWM(motor, m_speed); 
     return 0;
