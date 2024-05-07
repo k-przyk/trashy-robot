@@ -6,7 +6,7 @@ MotorController::MotorController(uint8_t servo_channel, uint8_t motor_channel) {
     servo = servo_channel; 
     motor = motor_channel; 
     m_speed = NEUTRAL; 
-    s_angle = NEUTRAL; 
+    s_angle = STRAIGHT; 
 }
 
 MotorController::~MotorController() {
@@ -22,7 +22,7 @@ void MotorController::setMotorSpeed(int speed) {
 
 void MotorController::setServoAngle(int angle) {
     //Convert Angle to PWM signal. NOTE: Servo range = 1ms --> 2ms  
-    pca->setPWM(servo, MIN_THROTTLE + angle); 
+    pca->setPWM(servo, angle); 
 }
 
 int MotorController::getMotorSpeed() {
