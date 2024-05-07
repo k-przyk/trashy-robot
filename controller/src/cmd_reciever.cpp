@@ -52,7 +52,7 @@ int main() {
         angleOutput = servoAngle / AVERAGE_LENGTH;
         speedOutput = motorSpeed / AVERAGE_LENGTH;
 
-        std::cout << "Setting Motor Speed: " << motorSpeed << " Servo Angle: " << servoAngle << std::endl;
+        std::cout << "Setting Motor Speed: " << speedOutput << " Servo Angle: " << angleOutput << std::endl;
         motor.setMotorSpeed(speedOutput);
         motor.setServoAngle(angleOutput);
 
