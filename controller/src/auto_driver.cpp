@@ -39,7 +39,7 @@ void manuver(zmq::context_t *ctx) {
     float ki_angle = 0.0;
     float kd_angle = 0.0;
 
-    float kp_speed = 0.3;
+    float kp_speed = 0.5;
     float ki_speed = 0.0;
     float kd_speed = 0.0;
 
