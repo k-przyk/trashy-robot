@@ -18,25 +18,14 @@ int main() {
     img_subscriber.connect("tcp://localhost:5553");
     img_subscriber.set(zmq::sockopt::subscribe, "");
 
-    zmq::socket_t roi_subscriber(context, zmq::socket_type::sub);
-    roi_subscriber.connect("tcp://localhost:5554");
-    roi_subscriber.set(zmq::sockopt::subscribe, "");
-
     zmq::socket_t publisher(context, zmq::socket_type::pub);
     publisher.bind("tcp://*:5555");
 
     cout << "Starting!" << endl;
 
-    int depthValue = 0;
-
     while (true) {
         zmq::message_t imageMessage;
         img_subscriber.recv(imageMessage, zmq::recv_flags::none);
-
-        zmq::message_t depthMessage;
-        if (roi_subscriber.recv(&depthMessage, ZMQ_DONTWAIT)) {
-            memcpy(&depthValue, depthMessage.data(), sizeof(int));
-        }
 
         // Decode image
         const char* messageData = static_cast<const char*>(imageMessage.data());
@@ -84,9 +73,9 @@ int main() {
         int key = waitKey(1);
         if (key == 'q') break;
 
-        CommandPoint objective = {centerPoint.x, centerPoint.y, (float) depthValue};
+        CommandPoint objective = {centerPoint.x, centerPoint.y, 0.0};
 
-        cout << "Center - x: " << objective.x << " y: " << objective.y << " z: " << depthValue << endl;
+        cout << "Center - x: " << objective.x << " y: " << objective.y << endl;
 
         zmq::message_t msg(sizeof(CommandPoint));
         memcpy(msg.data(), &objective, sizeof(CommandPoint));

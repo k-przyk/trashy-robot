@@ -2,7 +2,14 @@
 #include <iostream>
 #include <cstdio>
 #include <string>
+#include <thread>
+#include <future>
+#include <chrono>
 #include <opencv2/opencv.hpp>
 
 #include "depthai/depthai.hpp"
 // #include "utility.hpp"
+
+struct CommandPoint {
+    float x, y, z;
+};

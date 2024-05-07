@@ -67,7 +67,7 @@ void manuver(zmq::context_t *ctx) {
             trash_pt = {objective.x, objective.y, objective.z};
         mx.unlock();
 
-        if (trash_pt.x <= 0. || trash_pt.y <= 0. || trash_pt.z <= 0.) {
+        if (trash_pt.x <= 0. || trash_pt.y <= 0.) {
             commandToSend = {0.0, 0.0};
 
         } else {
@@ -124,18 +124,28 @@ void manuver(zmq::context_t *ctx) {
 void poll_objective(zmq::context_t *ctx) {
 
     // Start the subscriber
-    zmq::socket_t subscriber(*ctx, zmq::socket_type::sub);
-    subscriber.connect("tcp://localhost:5555");
+    zmq::socket_t colorSubscriber(*ctx, zmq::socket_type::sub);
+    colorSubscriber.connect("tcp://localhost:5555");
+    colorSubscriber.set(zmq::sockopt::subscribe, "");
 
-    subscriber.set(zmq::sockopt::subscribe, "");
+    zmq::socket_t depthSubscriber(*ctx, zmq::socket_type::sub);
+    depthSubscriber.connect("tcp://localhost:5554");
+    depthSubscriber.set(zmq::sockopt::subscribe, "");
 
     // Run until process is killed
     while (true) {
         zmq::message_t message;
-        subscriber.recv(message, zmq::recv_flags::none);
+        colorSubscriber.recv(message, zmq::recv_flags::none);
 
         Point receivedPoint;
         memcpy(&receivedPoint, message.data(), sizeof(Point));
+
+        zmq::message_t depthMessage;
+        if (depthSubscriber.recv(&depthMessage, ZMQ_DONTWAIT)) {
+            int depth;
+            memcpy(&depth, depthMessage.data(), sizeof(int));
+            receivedPoint.z = depth;
+        }
 
         // Populate shared point for PID loop
         mx.lock();
