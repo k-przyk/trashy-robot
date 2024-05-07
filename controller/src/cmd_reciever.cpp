@@ -6,7 +6,7 @@
 int main() {
 
     int speeds[AVERAGE_LENGTH];
-    int index, motorSpeed, nextSpeed, servoAngle, motorSpeed;
+    int index, nextSpeed, motorSpeed, servoAngle;
 
     MotorController motor(SERVO_CHANNEL, MOTOR_CHANNEL); 
     motor.setMotorSpeed(NEUTRAL); 
@@ -22,6 +22,7 @@ int main() {
     for (int i = 0; i < AVERAGE_LENGTH; i++) {
         speeds[i] = MIN_THROTTLE;
     }
+    motorSpeed = MIN_THROTTLE;
 
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     std::cout << "Starting!" << std::endl;
