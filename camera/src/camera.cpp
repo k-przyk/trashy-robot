@@ -151,11 +151,11 @@ int main() {
     // cfg.postProcessing.speckleFilter.enable = false;
     // cfg.postProcessing.speckleFilter.speckleRange = 50;
     // cfg.postProcessing.temporalFilter.enable = true;
-    cfg.postProcessing.spatialFilter.enable = true;
+    // cfg.postProcessing.spatialFilter.enable = true;
     // cfg.postProcessing.spatialFilter.holeFillingRadius = 2;
-    cfg.postProcessing.spatialFilter.numIterations = 2;
-    // cfg.postProcessing.thresholdFilter.minRange = 200;
-    // cfg.postProcessing.thresholdFilter.maxRange = 7000;
+    // cfg.postProcessing.spatialFilter.numIterations = 1;
+    cfg.postProcessing.thresholdFilter.minRange = 200;
+    cfg.postProcessing.thresholdFilter.maxRange = 7000;
     // cfg.postProcessing.decimationFilter.decimationFactor = 1;
     stereo->initialConfig.set(cfg);
 
