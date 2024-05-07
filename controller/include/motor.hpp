@@ -6,7 +6,7 @@
 
 // Important Constants
 #define MOTOR_START 0X0cc
-#define MAX_THROTTLE 0x118 
+#define MAX_THROTTLE 0x125
 #define MIN_THROTTLE 0X108
 // #define MAX_THROTTLE 0x110     // 0x150
 // #define MIN_STEERING 0x020
