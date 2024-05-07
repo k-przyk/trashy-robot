@@ -42,7 +42,7 @@ void pub_depth(zmq::context_t* context,
     auto qDepth = device->getOutputQueue("depth", 4, false); // DO NOT DELETE
     auto qConfig = device->getInputQueue("reconfig");
 
-    float lastDepth = 10000;
+    int lastDepth = 10000;
 
     while(true) {
         auto inRoi = qRoi->get<dai::SpatialLocationCalculatorData>()->getSpatialLocations();
