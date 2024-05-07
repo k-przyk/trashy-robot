@@ -11,14 +11,14 @@
 #define MAX_THROTTLE 0x199
 // #define MIN_STEERING 0x020
 // #define MAX_STEERING 0x080
-#define MIN_STEERING 0x0cc
-#define MAX_STEERING 0x0ff
+#define MIN_STEERING 0x0d5
+#define MAX_STEERING 0x199
 #define THROTTLE_RANGE (MAX_THROTTLE - MIN_THROTTLE)
 #define STEERING_RANGE (MAX_STEERING - MIN_STEERING)
 #define FREQUENCY 50 
 #define INCREMENT 0X1 
 #define NEUTRAL  (MAX_THROTTLE + MIN_THROTTLE) / 2
-#define STRAIGHT 0xdd // (MAX_STEERING + MIN_STEERING) / 2
+#define STRAIGHT 0xff // (MAX_STEERING + MIN_STEERING) / 2
 
 // Device State
 #define DEVICE_ADDRESS 0x40 // Default address for i2c driver
