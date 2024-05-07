@@ -24,7 +24,6 @@ float getDistanceError(Point *trash_pt) {
     d_error = trash_pt->z;
     d_error = (d_error > SATURATE_DEPTH) ? SATURATE_DEPTH : d_error;
     d_error = d_error / (float) SATURATE_DEPTH;
-    std::cout << "d_error: " << d_error << std::endl;
     return d_error;
 }
 
