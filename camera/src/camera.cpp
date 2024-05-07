@@ -87,6 +87,8 @@ void pub_depth(zmq::context_t* context,
         auto depthData = *(--endPtr);
         int depthZ = (int)depthData.spatialCoordinates.z;
 
+        std::cout << "Depth: " << depthZ << std::endl;
+
         if (depthZ > lastDepth * 2) {
             // The region hasn't aligned yet
             depthZ = lastDepth; // Dangerous code but better than sudden acceleration
