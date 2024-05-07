@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
 void setup(MotorController* motor) { 
     // Set initial motor conditions
     motor->setMotorSpeed(NEUTRAL); 
-    motor->setServoAngle(STRAIGHT);
+    motor->setServoAngle(NEUTRAL);
 
     // Setup curses
     initscr();
