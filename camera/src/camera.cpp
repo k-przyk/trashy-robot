@@ -78,7 +78,7 @@ void pub_depth(zmq::context_t* context,
             // std::cout << "Points - topleft (" << xmin << ", " << ymin << "), botRight (" << xmax << ", " << ymax << ")" << std::endl;
 
             config->roi = dai::Rect(topLeft, bottomRight);
-            config->calculationAlgorithm = dai::SpatialLocationCalculatorAlgorithm::MEAN;
+            config->calculationAlgorithm = dai::SpatialLocationCalculatorAlgorithm::MIN;
             dai::SpatialLocationCalculatorConfig cfg;
             cfg.addROI(*config);
             qConfig->send(cfg);
@@ -154,8 +154,8 @@ int main() {
     // cfg.postProcessing.spatialFilter.enable = true;
     // cfg.postProcessing.spatialFilter.holeFillingRadius = 2;
     // cfg.postProcessing.spatialFilter.numIterations = 1;
-    cfg.postProcessing.thresholdFilter.minRange = 200;
-    cfg.postProcessing.thresholdFilter.maxRange = 7000;
+    // cfg.postProcessing.thresholdFilter.minRange = 200;
+    // cfg.postProcessing.thresholdFilter.maxRange = 7000;
     // cfg.postProcessing.decimationFilter.decimationFactor = 1;
     stereo->initialConfig.set(cfg);
 
@@ -166,7 +166,7 @@ int main() {
     dai::SpatialLocationCalculatorConfigData config;
     config.depthThresholds.lowerThreshold = 100;
     config.depthThresholds.upperThreshold = 10000;
-    auto algorithm = dai::SpatialLocationCalculatorAlgorithm::MEAN;
+    auto algorithm = dai::SpatialLocationCalculatorAlgorithm::MIN;
     config.calculationAlgorithm = algorithm;
     config.roi = dai::Rect(topLeft, bottomRight);
 
