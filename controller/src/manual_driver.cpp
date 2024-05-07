@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
 
 void setup(MotorController* motor) { 
     // Set initial motor conditions
-    motor->setMotorSpeed(MOTOR_START); 
+    motor->setMotorSpeed(MOTOR_START, true); 
     motor->setServoAngle(STRAIGHT);
 
     // Setup curses
@@ -30,7 +30,7 @@ void setup(MotorController* motor) {
 
 void cleanup(MotorController* motor) {
     // Ensure car stops moving
-    motor->setMotorSpeed(NEUTRAL);
+    motor->setMotorSpeed(NEUTRAL, true);
     motor->setServoAngle(STRAIGHT);
 
     // Teardown curses

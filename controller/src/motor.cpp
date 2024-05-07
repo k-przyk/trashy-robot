@@ -17,7 +17,7 @@ MotorController::~MotorController() {
     printf("Freeing MotorController Controller\n"); 
 }
 
-void MotorController::setMotorSpeed(int speed, bool force=false) {
+void MotorController::setMotorSpeed(int speed, bool force) {
     if (force) {
         m_speed = speed;
     } else {

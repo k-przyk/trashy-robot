@@ -9,7 +9,7 @@ int main() {
     int index, nextSpeed, motorSum, motorSpeed, servoAngle;
 
     MotorController motor(SERVO_CHANNEL, MOTOR_CHANNEL); 
-    motor.setMotorSpeed(MOTOR_START); 
+    motor.setMotorSpeed(MOTOR_START, true); 
     motor.setServoAngle(STRAIGHT);
 
     zmq::context_t context(1);
@@ -26,7 +26,7 @@ int main() {
     index = 0;
 
     for (int s = MOTOR_START; s <= MIN_THROTTLE; s++) {
-        motor.setMotorSpeed(s);
+        motor.setMotorSpeed(s, true);
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
     std::cout << "Starting!" << std::endl;
@@ -49,7 +49,7 @@ int main() {
         motorSpeed = motorSum / AVERAGE_LENGTH;
 
         std::cout << "Setting Motor Speed: " << motorSpeed << " Servo Angle: " << servoAngle << std::endl;
-        motor.setMotorSpeed(motorSpeed);
+        motor.setMotorSpeed(motorSpeed, false);
         motor.setServoAngle(servoAngle);
 
         index = ++index >= AVERAGE_LENGTH ? 0 : index;
