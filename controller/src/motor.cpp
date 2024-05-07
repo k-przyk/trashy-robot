@@ -54,19 +54,19 @@ int MotorController::stepBackwards() {
 }
 
 int MotorController::stepLeft() { // TODO: Double check how this is working
+     s_angle -= INCREMENT; 
+    s_angle = (s_angle < MIN_STEERING) ? MIN_STEERING : s_angle;
+
+    pca->setPWM(servo, s_angle); 
+    return s_angle;
+}
+
+int MotorController::stepRight() {
     s_angle += INCREMENT; 
     s_angle = (s_angle > MAX_STEERING) ? MAX_STEERING : s_angle;
 
     pca->setPWM(servo, s_angle); 
-    return s_angle;  
-}
-
-int MotorController::stepRight() {
-    s_angle -= INCREMENT; 
-    s_angle = (s_angle < MIN_STEERING) ? MIN_STEERING : s_angle;
-
-    pca->setPWM(servo, s_angle); 
-    return s_angle;  
+    return s_angle; 
 }
 
 
