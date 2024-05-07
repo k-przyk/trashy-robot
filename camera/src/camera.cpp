@@ -46,36 +46,33 @@ void pub_depth(zmq::context_t* context,
         auto inRoi = qRoi->get<dai::SpatialLocationCalculatorData>()->getSpatialLocations();
         auto inDepth = qDepth->get<dai::ImgFrame>(); // DO NOT DELETE. NECESSARY OR CRASH
 
-        auto frame = inDepth->getCvFrame();
-
-        cv::imshow("disparity", frame);
-
-        int key = cv::waitKey(1);
-        if(key == 'q' || key == 'Q') {
-            return;
-        }
+        // Display depth as image
+        // auto frame = inDepth->getCvFrame();
+        // cv::imshow("disparity", frame);
+        // int key = cv::waitKey(1);
+        // if(key == 'q' || key == 'Q') {
+        //     return;
+        // }
 
         zmq::message_t objectMessage;
         if (roiSubscriber.recv(&objectMessage, ZMQ_DONTWAIT)) {
             float xmax, ymax, xmin, ymin;
             memcpy(&objective, objectMessage.data(), sizeof(CommandPoint));
             
-            xmin = objective.x / 300.0 - 0.025;
+            xmin = objective.x / 300.0 - 0.1; // Keep box big to manage motion blurring
             xmin = xmin < 0 ? 0 : xmin;
 
-            xmax = objective.x / 300.0 + 0.025;
+            xmax = objective.x / 300.0 + 0.1;
             xmax = xmax > 1 ? 1 : xmax;
 
-            ymin = objective.y / 300.0 - 0.025;
+            ymin = objective.y / 300.0 - 0.1;
             ymin = ymin < 0 ? 0 : ymin;
 
-            ymax = objective.y / 300.0 + 0.025;
+            ymax = objective.y / 300.0 + 0.1;
             ymax = ymax > 1 ? 1 : ymax;
 
             dai::Point2f topLeft(xmin, ymin);
             dai::Point2f bottomRight(xmax, ymax); 
-
-            // std::cout << "Points - topleft (" << xmin << ", " << ymin << "), botRight (" << xmax << ", " << ymax << ")" << std::endl;
 
             config->roi = dai::Rect(topLeft, bottomRight);
             config->calculationAlgorithm = dai::SpatialLocationCalculatorAlgorithm::MIN;
@@ -87,6 +84,13 @@ void pub_depth(zmq::context_t* context,
         auto endPtr = std::end(inRoi);
         auto depthData = *(--endPtr);
         int depthZ = (int)depthData.spatialCoordinates.z;
+
+        if (depthZ > lastDepth * 2) {
+            // The region hasn't aligned yet
+            depthZ = lastDepth; // Dangerous code but better than sudden acceleration
+        } else {
+            lastDepth = depthZ;
+        }
 
         zmq::message_t message(sizeof(int));
         memcpy(message.data(), &depthZ, sizeof(int));
@@ -148,15 +152,6 @@ int main() {
     stereo->setLeftRightCheck(true);
     stereo->setSubpixel(false);
     auto cfg = stereo->initialConfig.get();
-    // cfg.postProcessing.speckleFilter.enable = false;
-    // cfg.postProcessing.speckleFilter.speckleRange = 50;
-    // cfg.postProcessing.temporalFilter.enable = true;
-    // cfg.postProcessing.spatialFilter.enable = true;
-    // cfg.postProcessing.spatialFilter.holeFillingRadius = 2;
-    // cfg.postProcessing.spatialFilter.numIterations = 1;
-    // cfg.postProcessing.thresholdFilter.minRange = 200;
-    // cfg.postProcessing.thresholdFilter.maxRange = 7000;
-    // cfg.postProcessing.decimationFilter.decimationFactor = 1;
     stereo->initialConfig.set(cfg);
 
     // Roi config
