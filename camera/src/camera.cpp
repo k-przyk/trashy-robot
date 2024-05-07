@@ -77,7 +77,7 @@ void pub_depth(zmq::context_t* context,
             dai::Point2f bottomRight(xmax, ymax); 
 
             config->roi = dai::Rect(topLeft, bottomRight);
-            config->calculationAlgorithm = dai::SpatialLocationCalculatorAlgorithm::MEDIAN;
+            config->calculationAlgorithm = dai::SpatialLocationCalculatorAlgorithm::MIN;
             dai::SpatialLocationCalculatorConfig cfg;
             cfg.addROI(*config);
             qConfig->send(cfg);
@@ -89,10 +89,14 @@ void pub_depth(zmq::context_t* context,
 
         std::cout << "Depth: " << depthZ << std::endl;
 
+        // The region hasn't aligned yet
+        // Minimize variation
         if (depthZ > lastDepth * 2) {
-            // The region hasn't aligned yet
             depthZ = lastDepth; // Dangerous code but better than sudden acceleration
             lastDepth = lastDepth + lastDepth / 2;
+        } else if (depthZ != 0 && depthZ < lastDepth / 2) {
+            depthZ = lastDepth;
+            lastDepth = lastDepth - lastDepth / 2;
         } else if (depthZ != 0) {
             lastDepth = depthZ;
         }
@@ -166,7 +170,7 @@ int main() {
     dai::SpatialLocationCalculatorConfigData config;
     config.depthThresholds.lowerThreshold = 100;
     config.depthThresholds.upperThreshold = 10000;
-    auto algorithm = dai::SpatialLocationCalculatorAlgorithm::MEDIAN;
+    auto algorithm = dai::SpatialLocationCalculatorAlgorithm::MIN;
     config.calculationAlgorithm = algorithm;
     config.roi = dai::Rect(topLeft, bottomRight);
 
