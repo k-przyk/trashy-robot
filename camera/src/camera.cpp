@@ -47,7 +47,7 @@ void pub_depth(zmq::context_t* context,
         auto inDepth = qDepth->get<dai::ImgFrame>(); // DO NOT DELETE. NECESSARY OR CRASH
 
         auto frame = inDepth->getFrame();
-        frame.convertTo(frame, CV_8UC1, 255 / 100);
+        frame.convertTo(frame, CV_8UC1, 255 / 255);
 
         cv::imshow("disparity", frame);
 
