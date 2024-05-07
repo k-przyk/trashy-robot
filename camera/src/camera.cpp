@@ -57,7 +57,7 @@ void pub_depth(zmq::context_t* context,
 
         int key = cv::waitKey(1);
         if(key == 'q' || key == 'Q') {
-            return 0;
+            return;
         }
 
         zmq::message_t objectMessage;
