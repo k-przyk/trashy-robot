@@ -30,8 +30,7 @@ int MotorController::getMotorSpeed() {
 }
 
 int MotorController::getServoAngle() {
-    int pwm = pca->getPWM(servo); 
-    return pwm; 
+    return pca->getPWM(servo); 
 }
 
 int MotorController::getPWMFrequency(int channel) {
