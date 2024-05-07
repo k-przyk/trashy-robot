@@ -53,8 +53,8 @@ int main() {
     stereo->setSubpixel(false);
 
     // Roi config
-    dai::Point2f topLeft(0.45f, 0.6f);
-    dai::Point2f bottomRight(0.55f, 1.0f);
+    dai::Point2f topLeft(0.45f, 0.7f);
+    dai::Point2f bottomRight(0.55f, 0.9f);
 
     dai::SpatialLocationCalculatorConfigData config;
     config.depthThresholds.lowerThreshold = 100;
