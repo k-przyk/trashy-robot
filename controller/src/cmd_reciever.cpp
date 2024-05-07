@@ -46,9 +46,6 @@ int main() {
         std::cout << "Setting Motor Speed: " << speedOutput << " Servo Angle: " << angleOutput << std::endl;
         motor.setMotorSpeed(speedOutput);
         motor.setServoAngle(angleOutput);
-
-        index = ++index >= AVERAGE_LENGTH ? 0 : index;
-        std::cout << "index: " << index << std::endl;
     }
 
     return 0;

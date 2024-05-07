@@ -1,4 +1,5 @@
 #include "motor.hpp" 
+#include <iostream>
 
 MotorController::MotorController(uint8_t servo_channel, uint8_t motor_channel) {
     pca = new PCA9685(1, DEVICE_ADDRESS); 
@@ -19,6 +20,7 @@ MotorController::~MotorController() {
 void MotorController::setMotorSpeed(int speed) {
     m_speed = (speed > MAX_THROTTLE) ? MAX_THROTTLE : speed;
     m_speed = (m_speed < MIN_THROTTLE) ? MIN_THROTTLE : m_speed;
+    std::cout << "Speed: " << m_speed << std::endl;
     pca->setPWM(motor, m_speed); 
 }
 
