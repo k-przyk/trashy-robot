@@ -46,16 +46,16 @@ void pub_depth(zmq::context_t* context,
         auto inRoi = qRoi->get<dai::SpatialLocationCalculatorData>()->getSpatialLocations();
         auto inDepth = qDepth->get<dai::ImgFrame>(); // DO NOT DELETE. NECESSARY OR CRASH
 
-        // auto frame = inDepth->getFrame();
+        auto frame = inDepth->getFrame();
 
-        // cv::imshow("disparity", frame);
-        // cv::applyColorMap(frame, frame, cv::COLORMAP_JET);
-        // cv::imshow("disparity_color", frame);
+        cv::imshow("disparity", frame);
+        cv::applyColorMap(frame, frame, cv::COLORMAP_JET);
+        cv::imshow("disparity_color", frame);
 
-        // int key = cv::waitKey(1);
-        // if(key == 'q' || key == 'Q') {
-        //     return;
-        // }
+        int key = cv::waitKey(1);
+        if(key == 'q' || key == 'Q') {
+            return;
+        }
 
         zmq::message_t objectMessage;
         if (roiSubscriber.recv(&objectMessage, ZMQ_DONTWAIT)) {
@@ -77,7 +77,7 @@ void pub_depth(zmq::context_t* context,
             dai::Point2f topLeft(xmin, ymin);
             dai::Point2f bottomRight(xmax, ymax); 
 
-            std::cout << "Points - topleft (" << xmin << ", " << ymin << "), botRight (" << xmax << ", " << ymax << ")" << std::endl;
+            // std::cout << "Points - topleft (" << xmin << ", " << ymin << "), botRight (" << xmax << ", " << ymax << ")" << std::endl;
 
             config->roi = dai::Rect(topLeft, bottomRight);
             config->calculationAlgorithm = dai::SpatialLocationCalculatorAlgorithm::MEAN;
