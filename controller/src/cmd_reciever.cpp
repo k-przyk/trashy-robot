@@ -9,7 +9,7 @@ int main() {
     int index, nextSpeed, motorSum, motorSpeed, servoAngle;
 
     MotorController motor(SERVO_CHANNEL, MOTOR_CHANNEL); 
-    motor.setMotorSpeed(NEUTRAL); 
+    motor.setMotorSpeed(MOTOR_START); 
     motor.setServoAngle(STRAIGHT);
 
     zmq::context_t context(1);

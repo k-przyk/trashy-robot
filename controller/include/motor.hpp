@@ -5,7 +5,7 @@
 #include "PCA9685.h"
 
 // Important Constants
-// #define MIN_THROTTLE 0X0cc
+#define MOTOR_START 0X0cc
 #define MAX_THROTTLE 0x115 
 #define MIN_THROTTLE 0X108
 // #define MAX_THROTTLE 0x110     // 0x150
