@@ -61,23 +61,23 @@ void pub_depth(zmq::context_t* context,
             float xmax, ymax, xmin, ymin;
             memcpy(&objective, objectMessage.data(), sizeof(CommandPoint));
             
-            xmin = objective.x / 300.0 - 0.1; // Keep box big to manage motion blurring
+            xmin = objective.x / 300.0 - 0.025; // Keep box big to manage motion blurring
             xmin = xmin < 0 ? 0 : xmin;
 
-            xmax = objective.x / 300.0 + 0.1;
+            xmax = objective.x / 300.0 + 0.025;
             xmax = xmax > 1 ? 1 : xmax;
 
-            ymin = objective.y / 300.0 - 0.1;
+            ymin = objective.y / 300.0 - 0.025;
             ymin = ymin < 0 ? 0 : ymin;
 
-            ymax = objective.y / 300.0 + 0.1;
+            ymax = objective.y / 300.0 + 0.025;
             ymax = ymax > 1 ? 1 : ymax;
 
             dai::Point2f topLeft(xmin, ymin);
             dai::Point2f bottomRight(xmax, ymax); 
 
             config->roi = dai::Rect(topLeft, bottomRight);
-            config->calculationAlgorithm = dai::SpatialLocationCalculatorAlgorithm::MIN;
+            config->calculationAlgorithm = dai::SpatialLocationCalculatorAlgorithm::MEAN;
             dai::SpatialLocationCalculatorConfig cfg;
             cfg.addROI(*config);
             qConfig->send(cfg);
@@ -166,7 +166,7 @@ int main() {
     dai::SpatialLocationCalculatorConfigData config;
     config.depthThresholds.lowerThreshold = 100;
     config.depthThresholds.upperThreshold = 10000;
-    auto algorithm = dai::SpatialLocationCalculatorAlgorithm::MIN;
+    auto algorithm = dai::SpatialLocationCalculatorAlgorithm::MEAN;
     config.calculationAlgorithm = algorithm;
     config.roi = dai::Rect(topLeft, bottomRight);
 
