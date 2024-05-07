@@ -1,13 +1,13 @@
 #include "controller.hpp"
 #include "motor.hpp"
 
-#define AVERAGE_LENGTH 15
+#define AVERAGE_LENGTH 7
 
 int main() {
 
     int angles[AVERAGE_LENGTH];
     int speeds[AVERAGE_LENGTH];
-    int servoAngle, motorSpeed, index, nextAngle, nextSpeed;
+    int servoAngle, motorSpeed, index, nextAngle, nextSpeed, angleOutput, speedOutput;
 
     MotorController motor(SERVO_CHANNEL, MOTOR_CHANNEL); 
     motor.setMotorSpeed(NEUTRAL); 
@@ -38,8 +38,8 @@ int main() {
 
         std::cout << "Received Command: (" << receivedCommand.angle << ", " << receivedCommand.speed << ")" << std::endl;
 
-        int nextAngle = (int) ((receivedCommand.angle / 2.0 + 0.5) * STEERING_RANGE + MIN_STEERING); // Don't remove plus one
-        int nextSpeed = (int) (receivedCommand.speed * THROTTLE_RANGE + MIN_THROTTLE);
+        nextAngle = (int) ((receivedCommand.angle / 2.0 + 0.5) * STEERING_RANGE + MIN_STEERING); // Don't remove plus one
+        nextSpeed = (int) (receivedCommand.speed * THROTTLE_RANGE + MIN_THROTTLE);
 
         servoAngle -= angles[index % AVERAGE_LENGTH];
         servoAngle += nextAngle;
@@ -49,9 +49,12 @@ int main() {
         motorSpeed += nextSpeed;
         speeds[index % AVERAGE_LENGTH] = nextSpeed;
 
+        angleOutput = servoAngle / AVERAGE_LENGTH;
+        speedOutput = motorSpeed / AVERAGE_LENGTH;
+
         std::cout << "Setting Motor Speed: " << motorSpeed << " Servo Angle: " << servoAngle << std::endl;
-        motor.setMotorSpeed(motorSpeed / AVERAGE_LENGTH);
-        motor.setServoAngle(servoAngle / AVERAGE_LENGTH);
+        motor.setMotorSpeed(speedOutput);
+        motor.setServoAngle(angleOutput);
 
         index = ++index >= AVERAGE_LENGTH ? 0 : index;
     }
