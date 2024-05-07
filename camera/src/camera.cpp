@@ -47,6 +47,7 @@ void pub_depth(zmq::context_t* context,
         auto inDepth = qDepth->get<dai::ImgFrame>(); // DO NOT DELETE. NECESSARY OR CRASH
 
         auto frame = inDepth->getFrame();
+        frame.convertTo(frame, CV_8UC1, 255 / 240);
 
         cv::imshow("disparity", frame);
         cv::applyColorMap(frame, frame, cv::COLORMAP_JET);
