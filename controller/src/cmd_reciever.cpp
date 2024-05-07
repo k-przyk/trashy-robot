@@ -32,7 +32,7 @@ int main() {
         motorSpeed = (int) (receivedCommand.speed * THROTTLE_RANGE + MIN_THROTTLE);
 
         std::cout << "Setting Motor Speed: " << motorSpeed << " Servo Angle: " << servoAngle << std::endl;
-        // motor.setMotorSpeed(motorSpeed);
+        motor.setMotorSpeed(motorSpeed);
         // motor.setServoAngle(servoAngle);
     }
 

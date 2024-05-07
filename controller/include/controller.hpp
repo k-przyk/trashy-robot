@@ -18,4 +18,4 @@ struct Command {
 #define MAX_X 300
 #define CENTER_X 150
 #define DISTANCE_TOLERANCE 0.3
-#define SATURATE_DEPTH 2000
+#define SATURATE_DEPTH 3000
