@@ -147,6 +147,8 @@ void poll_objective(zmq::context_t *ctx) {
             receivedPoint.z = depth;
         }
 
+        std::cout << "Point - x: " << receivedPoint.x << " y: " << receivedPoint.y << " z: " << receivedPoint.z << std::endl;
+
         // Populate shared point for PID loop
         mx.lock();
             objective = receivedPoint;
