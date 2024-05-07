@@ -6,9 +6,9 @@
 
 // Important Constants
 // #define MIN_THROTTLE 0X0cc
-// #define MAX_THROTTLE 0x199 
+#define MAX_THROTTLE 0x199 
 #define MIN_THROTTLE 0X0cc
-#define MAX_THROTTLE 0x110     // 0x150
+// #define MAX_THROTTLE 0x110     // 0x150
 // #define MIN_STEERING 0x020
 // #define MAX_STEERING 0x080
 #define MIN_STEERING 0x0d5
@@ -17,7 +17,7 @@
 #define STEERING_RANGE (MAX_STEERING - MIN_STEERING)
 #define FREQUENCY 50 
 #define INCREMENT 0X1 
-#define NEUTRAL  MIN_THROTTLE
+#define NEUTRAL MIN_THROTTLE
 #define STRAIGHT (MAX_STEERING + MIN_STEERING) / 2
 
 // Device State
