@@ -46,19 +46,16 @@ void pub_depth(zmq::context_t* context,
         auto inRoi = qRoi->get<dai::SpatialLocationCalculatorData>()->getSpatialLocations();
         auto inDepth = qDepth->get<dai::ImgFrame>(); // DO NOT DELETE. NECESSARY OR CRASH
 
-        auto frame = inDepth->getFrame();
-        // Normalization for better visualization
+        // auto frame = inDepth->getFrame();
 
-        cv::imshow("disparity", frame);
+        // cv::imshow("disparity", frame);
+        // cv::applyColorMap(frame, frame, cv::COLORMAP_JET);
+        // cv::imshow("disparity_color", frame);
 
-        // Available color maps: https://docs.opencv.org/3.4/d3/d50/group__imgproc__colormap.html
-        cv::applyColorMap(frame, frame, cv::COLORMAP_JET);
-        cv::imshow("disparity_color", frame);
-
-        int key = cv::waitKey(1);
-        if(key == 'q' || key == 'Q') {
-            return;
-        }
+        // int key = cv::waitKey(1);
+        // if(key == 'q' || key == 'Q') {
+        //     return;
+        // }
 
         zmq::message_t objectMessage;
         if (roiSubscriber.recv(&objectMessage, ZMQ_DONTWAIT)) {
