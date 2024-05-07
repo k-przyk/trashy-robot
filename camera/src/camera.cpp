@@ -50,8 +50,6 @@ void pub_depth(zmq::context_t* context,
         frame.convertTo(frame, CV_8UC1, 255 / 240);
 
         cv::imshow("disparity", frame);
-        cv::applyColorMap(frame, frame, cv::COLORMAP_JET);
-        cv::imshow("disparity_color", frame);
 
         int key = cv::waitKey(1);
         if(key == 'q' || key == 'Q') {
@@ -146,20 +144,20 @@ int main() {
 
     // Depth configuration
     stereo->setDefaultProfilePreset(dai::node::StereoDepth::PresetMode::HIGH_ACCURACY);
-    stereo->initialConfig.setMedianFilter(dai::MedianFilter::KERNEL_7x7);
+    stereo->initialConfig.setMedianFilter(dai::MedianFilter::KERNEL_5x5);
     stereo->setExtendedDisparity(true);
     stereo->setLeftRightCheck(true);
     stereo->setSubpixel(false);
     auto cfg = stereo->initialConfig.get();
-    cfg.postProcessing.speckleFilter.enable = false;
-    cfg.postProcessing.speckleFilter.speckleRange = 50;
-    cfg.postProcessing.temporalFilter.enable = true;
-    cfg.postProcessing.spatialFilter.enable = true;
-    cfg.postProcessing.spatialFilter.holeFillingRadius = 2;
-    cfg.postProcessing.spatialFilter.numIterations = 1;
-    cfg.postProcessing.thresholdFilter.minRange = 200;
-    cfg.postProcessing.thresholdFilter.maxRange = 7000;
-    cfg.postProcessing.decimationFilter.decimationFactor = 1;
+    // cfg.postProcessing.speckleFilter.enable = false;
+    // cfg.postProcessing.speckleFilter.speckleRange = 50;
+    // cfg.postProcessing.temporalFilter.enable = true;
+    // cfg.postProcessing.spatialFilter.enable = true;
+    // cfg.postProcessing.spatialFilter.holeFillingRadius = 2;
+    // cfg.postProcessing.spatialFilter.numIterations = 1;
+    // cfg.postProcessing.thresholdFilter.minRange = 200;
+    // cfg.postProcessing.thresholdFilter.maxRange = 7000;
+    // cfg.postProcessing.decimationFilter.decimationFactor = 1;
     stereo->initialConfig.set(cfg);
 
     // Roi config
