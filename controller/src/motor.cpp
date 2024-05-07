@@ -17,9 +17,13 @@ MotorController::~MotorController() {
     printf("Freeing MotorController Controller\n"); 
 }
 
-void MotorController::setMotorSpeed(int speed) {
-    m_speed = (speed > MAX_THROTTLE) ? MAX_THROTTLE : speed;
-    m_speed = (m_speed < MOTOR_START) ? MOTOR_START : m_speed;
+void MotorController::setMotorSpeed(int speed, bool force=false) {
+    if (force) {
+        m_speed = speed;
+    } else {
+        m_speed = (speed > MAX_THROTTLE) ? MAX_THROTTLE : speed;
+        m_speed = (m_speed < MIN_THROTTLE) ? MIN_THROTTLE : m_speed;
+    }
     pca->setPWM(motor, m_speed); 
 }
 

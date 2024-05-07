@@ -32,7 +32,7 @@ class MotorController{
         // Controller Object to change Motor PWM
         MotorController(uint8_t, uint8_t); // Takes in Servo and ESC channels
         ~MotorController(); 
-        void setMotorSpeed(int speed); 
+        void setMotorSpeed(int speed, bool force=false); 
         void setServoAngle(int angle); 
         int stepForwards(); 
         int stepBackwards(); 

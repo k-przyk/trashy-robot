@@ -25,7 +25,10 @@ int main() {
     motorSum = MIN_THROTTLE * AVERAGE_LENGTH;
     index = 0;
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+    for (int s = MOTOR_START; s <= MIN_THROTTLE; s++) {
+        motor.setMotorSpeed(s);
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    }
     std::cout << "Starting!" << std::endl;
 
     while (true) {
