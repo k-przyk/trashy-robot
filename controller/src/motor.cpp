@@ -20,7 +20,6 @@ MotorController::~MotorController() {
 void MotorController::setMotorSpeed(int speed) {
     m_speed = (speed > MAX_THROTTLE) ? MAX_THROTTLE : speed;
     m_speed = (m_speed < MIN_THROTTLE) ? MIN_THROTTLE : m_speed;
-    std::cout << "Speed: " << m_speed << std::endl;
     pca->setPWM(motor, m_speed); 
 }
 
