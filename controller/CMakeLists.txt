@@ -19,18 +19,18 @@ find_package(cppzmq)
 find_package(Curses REQUIRED)
 
 # Test script for point generation
-add_executable(
-    point_generator
-    src/point_generator.cpp
-)
-target_link_libraries(
-    point_generator
-    PRIVATE cppzmq ${CMAKE_THREAD_LIBS_INIT}
-)
-target_include_directories(
-    point_generator 
-    PUBLIC ${PROJECT_SOURCE_DIR}/include
-) 
+# add_executable(
+#     point_generator
+#     src/point_generator.cpp
+# )
+# target_link_libraries(
+#     point_generator
+#     PRIVATE cppzmq ${CMAKE_THREAD_LIBS_INIT}
+# )
+# target_include_directories(
+#     point_generator 
+#     PUBLIC ${PROJECT_SOURCE_DIR}/include
+# ) 
 
 # Script for command reception
 add_executable(
@@ -66,21 +66,21 @@ target_include_directories(
 ) 
 
 # Script for manual control
-add_executable(
-    manual_driver
-    src/manual_driver.cpp
-    src/motor.cpp
-)
-target_link_libraries(
-    manual_driver 
-    PRIVATE cppzmq 
-            ${CMAKE_THREAD_LIBS_INIT} 
-            ${PROJECT_SOURCE_DIR}/libs/PCA9685/src/build/libPCA9685.so
-            ${CURSES_LIBRARIES}
-)
-target_include_directories(
-    manual_driver 
-    PUBLIC ${PROJECT_SOURCE_DIR}/include
-           ${PROJECT_SOURCE_DIR}/libs/PCA9685/src 
-           ${PROJECT_SOURCE_DIR}/libs/I2C/src
-) 
+# add_executable(
+#     manual_driver
+#     src/manual_driver.cpp
+#     src/motor.cpp
+# )
+# target_link_libraries(
+#     manual_driver 
+#     PRIVATE cppzmq 
+#             ${CMAKE_THREAD_LIBS_INIT} 
+#             ${PROJECT_SOURCE_DIR}/libs/PCA9685/src/build/libPCA9685.so
+#             ${CURSES_LIBRARIES}
+# )
+# target_include_directories(
+#     manual_driver 
+#     PUBLIC ${PROJECT_SOURCE_DIR}/include
+#            ${PROJECT_SOURCE_DIR}/libs/PCA9685/src 
+#            ${PROJECT_SOURCE_DIR}/libs/I2C/src
+# ) 

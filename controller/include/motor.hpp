@@ -8,7 +8,7 @@
 // #define MIN_THROTTLE 0X0cc
 // #define MAX_THROTTLE 0x199 
 #define MIN_THROTTLE 0X0cc
-#define MAX_THROTTLE 0x11a     // 0x150
+#define MAX_THROTTLE 0x120     // 0x150
 // #define MIN_STEERING 0x020
 // #define MAX_STEERING 0x080
 #define MIN_STEERING 0x0d5
