@@ -18,7 +18,7 @@
 #define FREQUENCY 50 
 #define INCREMENT 0X1 
 #define NEUTRAL  (MAX_THROTTLE + MIN_THROTTLE) / 2
-#define STRAIGHT 0xd5 // (MAX_STEERING + MIN_STEERING) / 2
+#define STRAIGHT 0xdd // (MAX_STEERING + MIN_STEERING) / 2
 
 // Device State
 #define DEVICE_ADDRESS 0x40 // Default address for i2c driver
