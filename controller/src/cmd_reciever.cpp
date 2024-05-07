@@ -23,6 +23,7 @@ int main() {
         speeds[i] = MIN_THROTTLE;
     }
     motorSum = MIN_THROTTLE * AVERAGE_LENGTH;
+    index = 0;
 
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     std::cout << "Starting!" << std::endl;
@@ -37,9 +38,6 @@ int main() {
         std::cout << "Received Command: (" << receivedCommand.angle << ", " << receivedCommand.speed << ")" << std::endl;
 
         servoAngle = (int) ((receivedCommand.angle / 2.0 + 0.5) * STEERING_RANGE + MIN_STEERING); // Don't remove plus one
-        std::cout << "Mapped Range: " << receivedCommand.speed * THROTTLE_RANGE << std::endl;
-        std::cout << "With MIN THROT: " << receivedCommand.speed * THROTTLE_RANGE + MIN_THROTTLE << std::endl;
-        
         nextSpeed = (int) (receivedCommand.speed * THROTTLE_RANGE + MIN_THROTTLE);
 
         motorSum -= speeds[index % AVERAGE_LENGTH];
