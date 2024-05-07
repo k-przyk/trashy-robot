@@ -31,7 +31,7 @@ int MotorController::getMotorSpeed() {
 
 int MotorController::getServoAngle() {
     int pwm = pca->getPWM(servo); 
-    return (pwm - MIN_THROTTLE); 
+    return pwm; 
 }
 
 int MotorController::getPWMFrequency(int channel) {
@@ -40,7 +40,7 @@ int MotorController::getPWMFrequency(int channel) {
 
 int MotorController::stepForwards() {
     m_speed += INCREMENT; 
-    if(m_speed >= MAX_THROTTLE) { m_speed = MAX_THROTTLE; }
+    m_speed = (m_speed > MAX_THROTTLE) ? MAX_THROTTLE : m_speed;
 
     pca->setPWM(motor, m_speed); 
     return 0;
@@ -48,7 +48,7 @@ int MotorController::stepForwards() {
 
 int MotorController::stepBackwards() {
     m_speed -= INCREMENT; 
-    if(m_speed <= MIN_THROTTLE) { m_speed = MIN_THROTTLE; }
+    m_speed = (m_speed < MIN_THROTTLE) ? MIN_THROTTLE : m_speed;
 
     pca->setPWM(motor, m_speed); 
     return 0;
@@ -56,16 +56,18 @@ int MotorController::stepBackwards() {
 
 int MotorController::stepLeft() { // TODO: Double check how this is working
     s_angle += INCREMENT; 
-    if(m_speed > MAX_THROTTLE) { return -1; }
+    s_angle = (s_angle > MAX_STEERING) ? MAX_STEERING : s_angle;
+
     pca->setPWM(servo, s_angle); 
-    return s_angle - MIN_THROTTLE;  
+    return s_angle;  
 }
 
 int MotorController::stepRight() {
     s_angle -= INCREMENT; 
-    if(m_speed < MIN_THROTTLE) { return -1; }
+    s_angle = (s_angle < MIN_STEERING) ? MIN_STEERING : s_angle;
+
     pca->setPWM(servo, s_angle); 
-    return s_angle - MIN_THROTTLE;  
+    return s_angle;  
 }
 
 
