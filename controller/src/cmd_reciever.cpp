@@ -13,10 +13,6 @@ int main() {
     motor.setMotorSpeed(NEUTRAL); 
     motor.setServoAngle(STRAIGHT);
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-
-    std::cout << "Starting!" << std::endl;
-
     zmq::context_t context(1);
     zmq::socket_t subscriber(context, zmq::socket_type::sub);
     subscriber.connect("tcp://localhost:5556"); // Connect to the sender's IP and port
@@ -28,6 +24,9 @@ int main() {
         angles[i] = 0;
         speeds[i] = 0;
     }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+    std::cout << "Starting!" << std::endl;
 
     while (true) {
         zmq::message_t message;
@@ -57,6 +56,7 @@ int main() {
         motor.setServoAngle(angleOutput);
 
         index = ++index >= AVERAGE_LENGTH ? 0 : index;
+        std::cout << "index: " << index << std::endl;
     }
 
     return 0;

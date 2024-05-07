@@ -66,21 +66,21 @@ target_include_directories(
 ) 
 
 # Script for manual control
-# add_executable(
-#     manual_driver
-#     src/manual_driver.cpp
-#     src/motor.cpp
-# )
-# target_link_libraries(
-#     manual_driver 
-#     PRIVATE cppzmq 
-#             ${CMAKE_THREAD_LIBS_INIT} 
-#             ${PROJECT_SOURCE_DIR}/libs/PCA9685/src/build/libPCA9685.so
-#             ${CURSES_LIBRARIES}
-# )
-# target_include_directories(
-#     manual_driver 
-#     PUBLIC ${PROJECT_SOURCE_DIR}/include
-#            ${PROJECT_SOURCE_DIR}/libs/PCA9685/src 
-#            ${PROJECT_SOURCE_DIR}/libs/I2C/src
-# ) 
+add_executable(
+    manual_driver
+    src/manual_driver.cpp
+    src/motor.cpp
+)
+target_link_libraries(
+    manual_driver 
+    PRIVATE cppzmq 
+            ${CMAKE_THREAD_LIBS_INIT} 
+            ${PROJECT_SOURCE_DIR}/libs/PCA9685/src/build/libPCA9685.so
+            ${CURSES_LIBRARIES}
+)
+target_include_directories(
+    manual_driver 
+    PUBLIC ${PROJECT_SOURCE_DIR}/include
+           ${PROJECT_SOURCE_DIR}/libs/PCA9685/src 
+           ${PROJECT_SOURCE_DIR}/libs/I2C/src
+) 

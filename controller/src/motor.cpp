@@ -17,12 +17,15 @@ MotorController::~MotorController() {
 }
 
 void MotorController::setMotorSpeed(int speed) {
-    pca->setPWM(motor, speed); 
+    m_speed = (speed > MAX_THROTTLE) ? MAX_THROTTLE : speed;
+    m_speed = (m_speed < MIN_THROTTLE) ? MIN_THROTTLE : m_speed;
+    pca->setPWM(motor, m_speed); 
 }
 
 void MotorController::setServoAngle(int angle) {
-    //Convert Angle to PWM signal. NOTE: Servo range = 1ms --> 2ms  
-    pca->setPWM(servo, angle); 
+    s_angle = (angle > MAX_STEERING) ? MAX_STEERING : angle;
+    s_angle = (s_angle < MIN_STEERING) ? MIN_STEERING : s_angle;
+    pca->setPWM(servo, s_angle); 
 }
 
 int MotorController::getMotorSpeed() {
