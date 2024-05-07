@@ -64,7 +64,9 @@ void pub_depth(zmq::context_t* context,
             ymax = ymax > 1 ? 1 : ymax;
 
             dai::Point2f topLeft(xmin, ymin);
-            dai::Point2f bottomRight(xmax, ymax);
+            dai::Point2f bottomRight(xmax, ymax); 
+
+            std::cout << "Points - topleft (" << xmin << ", " << ymin << "), botRight (" << xmax << ", " << ymax << ")" << std::endl;
 
             config->roi = dai::Rect(topLeft, bottomRight);
             config->calculationAlgorithm = dai::SpatialLocationCalculatorAlgorithm::MEDIAN;
