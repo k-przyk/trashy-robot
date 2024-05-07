@@ -46,8 +46,7 @@ void pub_depth(zmq::context_t* context,
         auto inRoi = qRoi->get<dai::SpatialLocationCalculatorData>()->getSpatialLocations();
         auto inDepth = qDepth->get<dai::ImgFrame>(); // DO NOT DELETE. NECESSARY OR CRASH
 
-        auto frame = inDepth->getFrame();
-        frame.convertTo(frame, CV_8UC1, 255 / 255);
+        auto frame = inDepth->getCvFrame();
 
         cv::imshow("disparity", frame);
 
@@ -151,13 +150,13 @@ int main() {
     auto cfg = stereo->initialConfig.get();
     // cfg.postProcessing.speckleFilter.enable = false;
     // cfg.postProcessing.speckleFilter.speckleRange = 50;
-    cfg.postProcessing.temporalFilter.enable = true;
-    // cfg.postProcessing.spatialFilter.enable = true;
+    // cfg.postProcessing.temporalFilter.enable = true;
+    cfg.postProcessing.spatialFilter.enable = true;
     // cfg.postProcessing.spatialFilter.holeFillingRadius = 2;
-    // cfg.postProcessing.spatialFilter.numIterations = 1;
+    cfg.postProcessing.spatialFilter.numIterations = 2;
     // cfg.postProcessing.thresholdFilter.minRange = 200;
     // cfg.postProcessing.thresholdFilter.maxRange = 7000;
-    cfg.postProcessing.decimationFilter.decimationFactor = 1;
+    // cfg.postProcessing.decimationFilter.decimationFactor = 1;
     stereo->initialConfig.set(cfg);
 
     // Roi config
