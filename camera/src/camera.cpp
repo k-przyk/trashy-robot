@@ -77,7 +77,7 @@ void pub_depth(zmq::context_t* context,
             dai::Point2f bottomRight(xmax, ymax); 
 
             config->roi = dai::Rect(topLeft, bottomRight);
-            config->calculationAlgorithm = dai::SpatialLocationCalculatorAlgorithm::MODE;
+            config->calculationAlgorithm = dai::SpatialLocationCalculatorAlgorithm::MEDIAN;
             dai::SpatialLocationCalculatorConfig cfg;
             cfg.addROI(*config);
             qConfig->send(cfg);
@@ -166,7 +166,7 @@ int main() {
     dai::SpatialLocationCalculatorConfigData config;
     config.depthThresholds.lowerThreshold = 100;
     config.depthThresholds.upperThreshold = 10000;
-    auto algorithm = dai::SpatialLocationCalculatorAlgorithm::MODE;
+    auto algorithm = dai::SpatialLocationCalculatorAlgorithm::MEDIAN;
     config.calculationAlgorithm = algorithm;
     config.roi = dai::Rect(topLeft, bottomRight);
 
