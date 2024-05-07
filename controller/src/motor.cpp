@@ -6,7 +6,7 @@ MotorController::MotorController(uint8_t servo_channel, uint8_t motor_channel) {
     servo = servo_channel; 
     motor = motor_channel; 
     m_speed = NEUTRAL; 
-    s_angle = NEUTRAL; 
+    s_angle = STRAIGHT; 
 }
 
 MotorController::~MotorController() {
