@@ -132,10 +132,23 @@ int main() {
     right->setCamera("right");
     right->setFps(fps);
 
+    // Depth configuration
     stereo->setDefaultProfilePreset(dai::node::StereoDepth::PresetMode::HIGH_ACCURACY);
-    stereo->initialConfig.setMedianFilter(dai::MedianFilter::KERNEL_5x5);
+    stereo->initialConfig.setMedianFilter(dai::MedianFilter::KERNEL_7x7);
+    stereo->setExtendedDisparity(true);
     stereo->setLeftRightCheck(true);
     stereo->setSubpixel(false);
+    auto cfg = stereo->initialConfig.get();
+    cfg.postProcessing.speckleFilter.enable = false;
+    cfg.postProcessing.speckleFilter.speckleRange = 50;
+    cfg.postProcessing.temporalFilter.enable = true;
+    cfg.postProcessing.spatialFilter.enable = true;
+    cfg.postProcessing.spatialFilter.holeFillingRadius = 2;
+    cfg.postProcessing.spatialFilter.numIterations = 1;
+    cfg.postProcessing.thresholdFilter.minRange = 200;
+    cfg.postProcessing.thresholdFilter.maxRange = 7000;
+    cfg.postProcessing.decimationFilter.decimationFactor = 1;
+    stereo->initialConfig.set(cfg);
 
     // Roi config
     dai::Point2f topLeft(0.45f, 0.7f);
