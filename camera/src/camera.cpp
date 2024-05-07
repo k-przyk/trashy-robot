@@ -51,16 +51,16 @@ void pub_depth(zmq::context_t* context,
             float xmax, ymax, xmin, ymin;
             memcpy(&objective, objectMessage.data(), sizeof(CommandPoint));
             
-            xmin = objective.x / 300.0 - 0.1;
+            xmin = objective.x / 300.0 - 0.05;
             xmin = xmin < 0 ? 0 : xmin;
 
-            xmax = objective.x / 300.0 + 0.1;
+            xmax = objective.x / 300.0 + 0.05;
             xmax = xmax > 1 ? 1 : xmax;
 
-            ymin = objective.y / 300.0 - 0.1;
+            ymin = objective.y / 300.0 - 0.05;
             ymin = ymin < 0 ? 0 : ymin;
 
-            ymax = objective.y / 300.0 + 0.1;
+            ymax = objective.y / 300.0 + 0.05;
             ymax = ymax > 1 ? 1 : ymax;
 
             dai::Point2f topLeft(xmin, ymin);
@@ -132,8 +132,9 @@ int main() {
     right->setCamera("right");
     right->setFps(fps);
 
-    stereo->setDefaultProfilePreset(dai::node::StereoDepth::PresetMode::HIGH_DENSITY);
-    stereo->setLeftRightCheck(false);
+    stereo->setDefaultProfilePreset(dai::node::StereoDepth::PresetMode::HIGH_ACCURACY);
+    stereo->initialConfig.setMedianFilter(dai::MedianFilter::KERNEL_5x5);
+    stereo->setLeftRightCheck(true);
     stereo->setSubpixel(false);
 
     // Roi config
