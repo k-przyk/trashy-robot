@@ -92,7 +92,7 @@ void pub_depth(zmq::context_t* context,
         if (depthZ > lastDepth * 2) {
             // The region hasn't aligned yet
             depthZ = lastDepth; // Dangerous code but better than sudden acceleration
-        } else if (depth != 0) {
+        } else if (depthZ != 0) {
             lastDepth = depthZ;
         }
 
