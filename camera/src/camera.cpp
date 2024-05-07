@@ -6,8 +6,6 @@ void pub_color(zmq::context_t* context, dai::Device* device) {
     zmq::socket_t rgbPublisher(*context, zmq::socket_type::pub);
     rgbPublisher.bind("tcp://*:5553"); // Bind to port 5555
 
-    std::cout << "Starting!" << std::endl;
-
     // Stream queues
     auto qRgb = device->getOutputQueue("rgb", 4, false);
 
@@ -86,8 +84,6 @@ void pub_depth(zmq::context_t* context,
         auto endPtr = std::end(inRoi);
         auto depthData = *(--endPtr);
         int depthZ = (int)depthData.spatialCoordinates.z;
-
-        std::cout << "Depth: " << depthZ << std::endl;
 
         // The region hasn't aligned yet
         // Minimize variation

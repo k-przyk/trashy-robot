@@ -58,24 +58,22 @@ int main() {
             Moments moments = cv::moments(contours[largestContourIndex]);
             if (moments.m00 > 0) {
                 centerPoint = Point2f(static_cast<float>(moments.m10 / moments.m00), static_cast<float>(moments.m01 / moments.m00));
-                boundingBox = boundingRect(contours[largestContourIndex]);
+                // boundingBox = boundingRect(contours[largestContourIndex]);
             }
         }
 
-        // Draw bounding box
-        if (centerPoint.x != -1 && centerPoint.y != -1) {
-            rectangle(image, boundingBox, Scalar(0, 255, 0), 2);
-            circle(image, centerPoint, 5, Scalar(0, 255, 0), -1);
-        }
-
-        imshow("Object Detection", image);
-
-        int key = waitKey(1);
-        if (key == 'q') break;
+        // Display frame
+        // if (centerPoint.x != -1 && centerPoint.y != -1) {
+        //     rectangle(image, boundingBox, Scalar(0, 255, 0), 2);
+        //     circle(image, centerPoint, 5, Scalar(0, 255, 0), -1);
+        // }
+        // imshow("Object Detection", image);
+        // int key = waitKey(1);
+        // if (key == 'q') break;
 
         CommandPoint objective = {centerPoint.x, centerPoint.y, 0.0};
 
-        cout << "Center - x: " << objective.x << " y: " << objective.y << endl;
+        // cout << "Center - x: " << objective.x << " y: " << objective.y << endl;
 
         zmq::message_t msg(sizeof(CommandPoint));
         memcpy(msg.data(), &objective, sizeof(CommandPoint));
