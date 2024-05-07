@@ -73,8 +73,8 @@ void loop(MotorController* motor) {
         }
         motor_speed = motor->getMotorSpeed(); 
         turn_angle = motor->getServoAngle();
-        // printw("Motor's speed is: %x\n", motor_speed); 
-        printw("A: %x  ", turn_angle); 
+        printw("S: %x  ", motor_speed); 
+        // printw("A: %x  ", turn_angle); 
     }
     while (cmd != 'q');
 } 
