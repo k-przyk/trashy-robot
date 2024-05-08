@@ -51,7 +51,7 @@ int main() {
             }
         }
 
-        std::cout << "Area: " << maxArea << std::endl;
+        // std::cout << "Area: " << maxArea << std::endl;
 
         // Find center of object in frame
         Point2f centerPoint(-1, -1);
