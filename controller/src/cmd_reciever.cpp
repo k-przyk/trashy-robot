@@ -49,7 +49,7 @@ int main() {
         motorSum += speeds[index % AVERAGE_LENGTH];
         motorSpeed = motorSum / AVERAGE_LENGTH;
 
-        // std::cout << "Setting Motor Speed: " << motorSpeed << " Servo Angle: " << servoAngle << std::endl;
+        std::cout << "Setting Motor Speed: " << motorSpeed << " Servo Angle: " << servoAngle << std::endl;
         motor.setMotorSpeed(motorSpeed, false);
         motor.setServoAngle(servoAngle);
 
