@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
 
 void setup(MotorController* motor) { 
     // Set initial motor conditions
-    motor->setMotorSpeed(MOTOR_START, true); 
+    motor->setMotorSpeed(NEUTRAL, true); 
     motor->setServoAngle(STRAIGHT);
 
     // Setup curses
